@@ -1,141 +1,86 @@
-/* Réduction de 50% de la taille des cartes TXT */
+TITRE: La propriété background en CSS
+DESCRIPTION: Tout sur les arrière-plans en CSS
+NIVEAU: Débutant
 
-.txt-card {
-    /* Réduction générale */
-    padding: 12px !important; /* 25px → 12px (52% moins) */
-    border-radius: 12px !important; /* 20px → 12px */
-    border-left-width: 3px !important; /* 5px → 3px */
+## DÉFINITION
+La propriété CSS `background` est une propriété raccourcie qui permet de définir toutes les propriétés d'arrière-plan d'un élément en une seule déclaration. Elle contrôle l'apparence visuelle de l'arrière-plan d'un élément HTML.
+
+## RÔLE
+Le rôle principal de la propriété background est de :
+- Définir une couleur d'arrière-plan unie
+- Ajouter une ou plusieurs images d'arrière-plan
+- Contrôler le positionnement des images
+- Définir le comportement de répétition
+- Spécifier la taille de l'image
+- Créer des dégradés de couleur
+
+## USAGE
+La propriété background s'utilise sur n'importe quel élément HTML. Voici les bonnes pratiques :
+1. Utilisez des couleurs avec un bon contraste pour la lisibilité
+2. Optimisez les images pour le web
+3. Utilisez des dégradés pour des effets modernes
+4. Testez sur différents appareils et tailles d'écran
+
+## EXEMPLE 1 - Couleur unie
+CODE: 
+.boite {
+    background: #3498db;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
 }
 
-/* En-tête réduit */
-.txt-card-header {
-    margin-bottom: 12px !important; /* 20px → 12px */
-    gap: 8px !important; /* 15px → 8px */
+RÉSULTAT: <div style="background: #3498db; width: 200px; height: 200px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">Couleur unie</div>
+
+## EXEMPLE 2 - Image d'arrière-plan
+CODE:
+.hero {
+    background: url('image.jpg') center/cover no-repeat;
+    height: 300px;
+    position: relative;
 }
 
-.txt-card-icon {
-    width: 35px !important; /* 50px → 35px (30% moins) */
-    height: 35px !important;
-    font-size: 18px !important; /* 28px → 18px */
-    border-radius: 8px !important; /* 12px → 8px */
+RÉSULTAT: <div style="background: linear-gradient(45deg, #3498db, #2ecc71); height: 150px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: white; font-weight: bold;">Image ou dégradé simulé</div>
+
+## EXEMPLE 3 - Dégradé linéaire
+CODE:
+.bouton {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
 }
 
-.txt-card-title {
-    font-size: 1rem !important; /* 1.3rem → 1rem (23% moins) */
-    -webkit-line-clamp: 1 !important; /* 2 → 1 ligne */
+RÉSULTAT: <button style="background: linear-gradient(to right, #ff7e5f, #feb47b); padding: 12px 24px; border: none; border-radius: 25px; color: white; cursor: pointer; font-weight: bold;">Bouton avec dégradé</button>
+
+## EXEMPLE 4 - Plusieurs arrière-plans
+CODE:
+.card {
+    background: 
+        linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        url('texture.jpg');
+    background-size: cover;
+    padding: 20px;
+    color: white;
 }
 
-/* Prévisualisation réduite */
-.txt-card-preview {
-    margin-bottom: 12px !important; /* 20px → 12px */
-    padding: 10px !important; /* 15px → 10px */
-    min-height: 60px !important; /* 100px → 60px (40% moins) */
-    border-radius: 8px !important; /* 12px → 8px */
-}
+RÉSULTAT: <div style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), linear-gradient(135deg, #667eea, #764ba2); padding: 20px; border-radius: 10px; color: white; height: 100px; display: flex; align-items: center; justify-content: center; font-weight: bold;">Arrière-plan superposé</div>
 
-.txt-card-preview::before {
-    height: 2px !important; /* 4px → 2px */
-}
+## PROPRIÉTÉS DÉTAILLÉES
+- `background-color` : Définit la couleur d'arrière-plan
+- `background-image` : Définit une ou plusieurs images
+- `background-position` : Position de l'image (center, top, left, etc.)
+- `background-size` : Taille de l'image (cover, contain, valeurs)
+- `background-repeat` : Répétition (no-repeat, repeat-x, repeat-y)
+- `background-attachment` : Fixe ou défile avec le contenu
 
-.txt-preview-text {
-    font-size: 0.85rem !important; /* 0.95rem → 0.85rem */
-    -webkit-line-clamp: 2 !important; /* 4 → 2 lignes */
-    line-height: 1.4 !important; /* 1.6 → 1.4 */
-}
+## ASTUCES
+1. Utilisez `background-clip: text` avec `-webkit-text-fill-color: transparent` pour du texte avec dégradé
+2. Les dégradés CSS remplacent souvent les images et améliorent les performances
+3. Utilisez des couleurs semi-transparentes pour superposer du contenu
+4. Testez toujours le contraste texte/arrière-plan pour l'accessibilité
 
-/* Effet de dégradé plus petit */
-.txt-card-preview::after {
-    height: 15px !important; /* 30px → 15px */
-}
-
-/* Pied de page réduit */
-.txt-card-footer {
-    padding-top: 8px !important; /* 15px → 8px */
-}
-
-.txt-file-size {
-    font-size: 0.75rem !important; /* 0.85rem → 0.75rem */
-    padding: 3px 8px !important; /* 5px 12px → 3px 8px */
-}
-
-.txt-open-btn {
-    width: 30px !important; /* 40px → 30px (25% moins) */
-    height: 30px !important;
-}
-
-.txt-open-btn i {
-    font-size: 1rem !important; /* 1.2rem → 1rem */
-}
-
-/* Réduction de l'ombre au survol */
-.txt-card:hover {
-    transform: translateY(-4px) !important; /* -8px → -4px */
-    box-shadow: 8px 8px 16px #b8bec7,
-                -8px -8px 16px #ffffff !important; /* Réduit de 12px à 8px */
-}
-
-/* Ajustement de la grille pour plus de cartes */
-.txt-cards-grid {
-    gap: 12px !important; /* 20px → 12px (40% moins) */
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; /* 280px → 200px (29% moins) */
-}
-
-/* Responsive mobile */
-@media (max-width: 768px) {
-    .txt-cards-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
-        gap: 8px !important;
-    }
-    
-    .txt-card {
-        padding: 8px !important;
-    }
-    
-    .txt-card-icon {
-        width: 28px !important;
-        height: 28px !important;
-        font-size: 14px !important;
-    }
-    
-    .txt-card-preview {
-        min-height: 50px !important;
-        padding: 8px !important;
-    }
-    
-    .txt-preview-text {
-        font-size: 0.8rem !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .txt-cards-grid {
-        grid-template-columns: 1fr !important;
-    }
-    
-    .txt-card {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        padding: 10px !important;
-    }
-    
-    .txt-card-header {
-        flex: 1 !important;
-        margin-bottom: 0 !important;
-    }
-    
-    .txt-card-preview {
-        display: none !important; /* Cache la prévisualisation sur mobile */
-    }
-    
-    .txt-card-footer {
-        border-top: none !important;
-        padding-top: 0 !important;
-        flex-direction: column !important;
-        gap: 5px !important;
-    }
-    
-    .txt-file-size {
-        font-size: 0.7rem !important;
-    }
-}
+## SUPPORT NAVIGATEURS
+La propriété background est supportée par tous les navigateurs modernes. Pour les dégradés, vérifiez les préfixes pour les anciennes versions.
