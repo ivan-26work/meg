@@ -17,7 +17,7 @@ La propriété `border-radius` est la clé pour créer des coins arrondis. Elle 
 ## MÉTHODE 1: BOUTON SIMPLE ARRONDI
 
 
-/* Bouton basique avec coins arrondis */
+Bouton basique avec coins arrondis 
 .bouton-simple {
     padding: 12px 24px;
     background-color: #3498db;
