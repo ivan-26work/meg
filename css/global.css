@@ -1,0 +1,800 @@
+/* global.css - Styles globaux pour MG_ultra */
+
+/* ==========================================================================
+   RESET ET CONFIGURATION DE BASE
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #e0e5ec; /* Couleur de base néo-morphique */
+    color: #333;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding-top: 70px; /* Pour la barre de recherche fixe */
+    padding-bottom: 70px; /* Pour la barre de navigation bas */
+    overflow-x: hidden;
+}
+
+/* ==========================================================================
+   BARRE DE RECHERCHE FIXE EN HAUT
+   ========================================================================== */
+.search-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #e0e5ec;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(163, 177, 198, 0.3);
+    border-bottom: 1px solid rgba(163, 177, 198, 0.2);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #e0e5ec;
+    border-radius: 50px; /* Bordure arrondie 50px */
+    padding: 8px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: inset 4px 4px 8px #b8bec7,
+                inset -4px -4px 8px #ffffff;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+    box-shadow: inset 6px 6px 12px #b8bec7,
+                inset -6px -6px 12px #ffffff,
+                0 0 0 3px rgba(33, 150, 243, 0.1);
+    border-color: #2196f3;
+}
+
+.search-bar i {
+    color: #7d8da6;
+    font-size: 1.1rem;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+#search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    min-width: 0;
+}
+
+#search-input::placeholder {
+    color: #7d8da6;
+    opacity: 0.8;
+}
+
+.clear-btn {
+    background: transparent;
+    border: none;
+    color: #7d8da6;
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 10px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.clear-btn.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.clear-btn:hover {
+    background: rgba(125, 141, 166, 0.1);
+    color: #f44336;
+}
+
+/* ==========================================================================
+   BARRE D'ONGLETS PRINCIPALE
+   ========================================================================== */
+.main-tabs {
+    position: sticky;
+    top: 70px; /* Juste en dessous de la barre de recherche */
+    z-index: 999;
+    background: #e0e5ec;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(163, 177, 198, 0.2);
+    box-shadow: 0 2px 8px rgba(163, 177, 198, 0.1);
+}
+
+/* Conteneur rectangulaire avec bordure 50px */
+.mode-buttons {
+    display: flex;
+    background: #e0e5ec;
+    border-radius: 50px; /* Bordure arrondie 50px */
+    padding: 4px;
+    box-shadow: 6px 6px 12px #b8bec7,
+                -6px -6px 12px #ffffff;
+    flex-shrink: 0;
+}
+
+/* Boutons PDF/TXT avec bordure 50px */
+.mode-btn {
+    border: none;
+    background: transparent;
+    padding: 10px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    border-radius: 50px; /* Bordure arrondie 50px */
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.mode-btn i {
+    font-size: 1rem;
+}
+
+.mode-btn:hover {
+    background: rgba(125, 141, 166, 0.1);
+}
+
+.mode-btn.active {
+    background: #2196f3; /* Bleu pour TXT actif */
+    color: white;
+    box-shadow: 4px 4px 8px rgba(33, 150, 243, 0.3),
+                -4px -4px 8px rgba(255, 255, 255, 0.5);
+}
+
+.mode-btn.active[data-mode="pdf"] {
+    background: #4caf50; /* Vert pour PDF actif */
+    box-shadow: 4px 4px 8px rgba(76, 175, 80, 0.3),
+                -4px -4px 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Zone scrollable pour les 10 onglets CSS */
+.css-tabs-scroll {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+}
+
+.css-tabs-scroll::-webkit-scrollbar {
+    height: 5px;
+}
+
+.css-tabs-scroll::-webkit-scrollbar-track {
+    background: rgba(163, 177, 198, 0.1);
+    border-radius: 10px;
+}
+
+.css-tabs-scroll::-webkit-scrollbar-thumb {
+    background: rgba(125, 141, 166, 0.5);
+    border-radius: 10px;
+}
+
+.css-tabs-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(125, 141, 166, 0.7);
+}
+
+.css-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 2px;
+}
+
+/* Boutons des 10 onglets CSS avec bordure 50px */
+.css-tab {
+    border: none;
+    background: #e0e5ec;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    border-radius: 50px; /* Bordure arrondie 50px */
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: 4px 4px 8px #b8bec7,
+                -4px -4px 8px #ffffff;
+    transition: all 0.3s ease;
+}
+
+.css-tab:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px #b8bec7,
+                -6px -6px 12px #ffffff;
+}
+
+.css-tab.active {
+    background: #9c27b0; /* Violet pour onglet CSS actif */
+    color: white;
+    box-shadow: 4px 4px 8px rgba(156, 39, 176, 0.3),
+                -4px -4px 8px rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   ZONE DE CONTENU PRINCIPAL
+   ========================================================================== */
+.content-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: calc(100vh - 140px); /* 140px = header + footer */
+}
+
+.content-section {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* États de chargement */
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #7d8da6;
+    font-size: 1.1rem;
+}
+
+.loading::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(125, 141, 166, 0.3);
+    border-top-color: #2196f3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   BARRE DE NAVIGATION BAS
+   ========================================================================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #e0e5ec;
+    padding: 10px;
+    box-shadow: 0 -4px 12px rgba(163, 177, 198, 0.3);
+    border-top: 1px solid rgba(163, 177, 198, 0.2);
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    background: #e0e5ec;
+    border-radius: 50px; /* Bordure arrondie 50px */
+    padding: 8px;
+    max-width: 400px;
+    margin: 0 auto;
+    box-shadow: 6px 6px 12px #b8bec7,
+                -6px -6px 12px #ffffff;
+}
+
+.nav-btn {
+    border: none;
+    background: transparent;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    border-radius: 50px; /* Bordure arrondie 50px */
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.nav-btn:hover {
+    background: rgba(125, 141, 166, 0.1);
+}
+
+.nav-btn.active {
+    background: #3f51b5; /* Indigo pour CSS actif */
+    color: white;
+    box-shadow: 4px 4px 8px rgba(63, 81, 181, 0.3),
+                -4px -4px 8px rgba(255, 255, 255, 0.5);
+}
+
+.nav-btn i {
+    font-size: 1.2rem;
+}
+
+/* ==========================================================================
+   MODAL TXT (PLEIN ÉCRAN)
+   ========================================================================== */
+.txt-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+    background: #e0e5ec;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.modal-title {
+    padding: 25px 25px 15px;
+    margin: 0;
+    color: #333;
+    font-size: 1.8rem;
+    border-bottom: 1px solid rgba(163, 177, 198, 0.3);
+    background: #e0e5ec;
+}
+
+.modal-body {
+    flex: 1;
+    padding: 25px;
+    overflow-y: auto;
+    color: #333;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+        padding-bottom: 60px;
+    }
+    
+    .search-bar {
+        padding: 6px 15px;
+        border-radius: 40px;
+    }
+    
+    .main-tabs {
+        top: 60px;
+        flex-direction: column;
+        gap: 10px;
+        padding: 8px;
+    }
+    
+    .mode-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .mode-btn {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .css-tabs-scroll {
+        width: 100%;
+    }
+    
+    .css-tab {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .content-main {
+        padding: 15px;
+    }
+    
+    .nav-buttons {
+        padding: 6px;
+    }
+    
+    .nav-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .modal-content {
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-bar {
+        padding: 5px 12px;
+        border-radius: 35px;
+    }
+    
+    .mode-btn {
+        padding: 6px 15px;
+        font-size: 0.85rem;
+    }
+    
+    .css-tab {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .nav-btn {
+        padding: 8px 15px;
+        font-size: 0.85rem;
+    }
+    
+    .modal-title {
+        font-size: 1.4rem;
+        padding: 20px 20px 10px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+        font-size: 1rem;
+    }
+}
+
+/* ==========================================================================
+   UTILITAIRES
+   ========================================================================== */
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.flex {
+    display: flex;
+}
+
+/* Support pour préférence de mouvement réduit */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* Styles d'accessibilité pour le focus */
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid #2196f3;
+    outline-offset: 2px;
+}
+/* BARRE DE NAVIGATION BAS - NÉO-MORPHIQUE AVEC BORDURE THÈME */
+
+/* Conteneur principal - Néo-morphique */
+.bottom-nav {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e0e5ec;
+    border-radius: 25px;
+    box-shadow: 20px 20px 40px #b8bec7,
+                -20px -20px 40px #ffffff;
+    z-index: 1000;
+    padding: 5px;
+    width: auto;
+    min-width: 220px;
+    max-width: 90%;
+    border: 2px solid;
+    /* La couleur de bordure sera définie par thème */
+}
+
+/* Thème CSS - BLEU */
+.css-theme .bottom-nav {
+    border-color: #3498db;
+}
+
+/* Thème HTML - ROUGE (tu as dit vert mais dans html.html c'est rouge) */
+.html-theme .bottom-nav {
+    border-color: #e74c3c;
+}
+
+/* Conteneur interne */
+.nav-container {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    height: 55px;
+    border-radius: 20px;
+    background: #e0e5ec;
+    overflow: hidden;
+    box-shadow: inset 5px 5px 10px #b8bec7,
+                inset -5px -5px 10px #ffffff;
+}
+
+/* Boutons en forme de pilule - Néo-morphique */
+.nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #5a6c7d;
+    padding: 0 30px;
+    height: 100%;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    flex: 1;
+    background: #e0e5ec;
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Premier bouton */
+.nav-link:first-child {
+    border-radius: 20px 0 0 20px;
+}
+
+/* Deuxième bouton */
+.nav-link:last-child {
+    border-radius: 0 20px 20px 0;
+}
+
+/* Effet néo-morphique au repos */
+.nav-link {
+    box-shadow: 5px 5px 10px #b8bec7,
+                -5px -5px 10px #ffffff;
+}
+
+/* Hover - effet "pressé" */
+.nav-link:hover {
+    color: #2c3e50;
+    box-shadow: inset 3px 3px 6px #b8bec7,
+                inset -3px -3px 6px #ffffff;
+    transform: translateY(1px);
+}
+
+/* Actif - effet enfoncé */
+.nav-link.active {
+    color: white;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2),
+                inset -5px -5px 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Couleur de l'actif par thème */
+.css-theme .nav-link.active {
+    background: #3498db;
+}
+
+.html-theme .nav-link.active {
+    background: #e74c3c;
+}
+
+/* Icônes */
+.nav-link i {
+    font-size: 1.3rem;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover i {
+    transform: scale(1.1);
+}
+
+.nav-link.active i {
+    transform: scale(1.15);
+}
+
+/* Texte */
+.nav-link span {
+    font-size: 0.95rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover span {
+    transform: translateX(2px);
+}
+
+/* Séparateur subtil entre boutons */
+.nav-link:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 15px;
+    bottom: 15px;
+    width: 1px;
+    background: linear-gradient(to bottom, 
+                transparent, 
+                rgba(184, 190, 199, 0.5), 
+                transparent);
+}
+
+/* Animation d'activation */
+@keyframes neoPulse {
+    0% {
+        box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2),
+                    inset -5px -5px 10px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        box-shadow: inset 7px 7px 14px rgba(0, 0, 0, 0.25),
+                    inset -7px -7px 14px rgba(255, 255, 255, 0.15);
+    }
+    100% {
+        box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.2),
+                    inset -5px -5px 10px rgba(255, 255, 255, 0.1);
+    }
+}
+
+.nav-link.active {
+    animation: neoPulse 2s infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .bottom-nav {
+        bottom: 20px;
+        min-width: 200px;
+        border-radius: 20px;
+    }
+    
+    .nav-container {
+        height: 50px;
+        border-radius: 15px;
+    }
+    
+    .nav-link {
+        padding: 0 20px;
+        border-radius: 15px !important;
+    }
+    
+    .nav-link:first-child {
+        border-radius: 15px 0 0 15px !important;
+    }
+    
+    .nav-link:last-child {
+        border-radius: 0 15px 15px 0 !important;
+    }
+    
+    .nav-link i {
+        font-size: 1.2rem;
+        margin-right: 8px;
+    }
+    
+    .nav-link span {
+        font-size: 0.9rem;
+    }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+    .bottom-nav {
+        bottom: 15px;
+        min-width: 180px;
+        padding: 4px;
+    }
+    
+    .nav-container {
+        height: 45px;
+    }
+    
+    .nav-link {
+        padding: 0 15px;
+    }
+    
+    .nav-link span {
+        display: none;
+    }
+    
+    .nav-link i {
+        margin-right: 0;
+        font-size: 1.3rem;
+    }
+}
+
+/* Effet de brillance sur le conteneur */
+.bottom-nav::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 70%);
+    border-radius: 27px;
+    z-index: -1;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Pour les thèmes dans html.html et css.html */
+body.html-theme .bottom-nav {
+    border-color: #e74c3c;
+}
+
+body.css-theme .bottom-nav {
+    border-color: #3498db;
+}

@@ -1,0 +1,364 @@
+/* style-html.css - Zéro cadre, tout direct sur le conteneur */
+
+/* ==========================================================================
+   CONTENEUR DES COURS - PLEIN ÉCRAN SANS CADRE
+   ========================================================================== */
+#cours-container {
+    display: none;
+    width: 100%;
+    padding: 0;
+    background: #f8f9fa;
+    min-height: calc(100vh - 180px);
+}
+
+#cours-container[style*="display: block"] {
+    display: block;
+}
+
+/* ==========================================================================
+   ARTICLE DE COURS - DIRECT SUR LE CONTENEUR
+   ========================================================================== */
+.html-cours-article {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    background: transparent;
+}
+
+/* ==========================================================================
+   1. TITRE PRINCIPAL - DIRECT
+   ========================================================================== */
+.html-cours-header {
+    padding: 50px 0 30px;
+    background: transparent;
+    color: #2c3e50;
+    text-align: center;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.html-cours-title {
+    font-size: 2.5rem;
+    margin: 0 0 15px 0;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #e74c3c;
+}
+
+.html-cours-meta {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1rem;
+    color: #7f8c8d;
+}
+
+.html-cours-category, 
+.html-cours-difficulty {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    padding: 8px 20px;
+    border-radius: 20px;
+}
+
+/* ==========================================================================
+   2. CONTENU DES SECTIONS - DIRECT
+   ========================================================================== */
+.html-cours-section {
+    padding: 0;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+/* Titres de section */
+.html-section-title {
+    color: #2c3e50;
+    font-size: 1.8rem;
+    margin: 0 0 25px 0;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 10px;
+}
+
+.html-section-title i {
+    color: #e74c3c;
+    font-size: 1.4rem;
+}
+
+/* Contenu texte */
+.html-section-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #34495e;
+    margin-bottom: 30px;
+}
+
+.html-section-content p {
+    margin-bottom: 20px;
+}
+
+/* Listes */
+.html-section-content ul {
+    margin: 20px 0 20px 25px;
+    padding: 0;
+    list-style-type: none;
+}
+
+.html-section-content li {
+    margin-bottom: 12px;
+    padding-left: 30px;
+    position: relative;
+}
+
+.html-section-content li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #e74c3c;
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* ==========================================================================
+   3. CODE - DIRECT SUR LE CONTENEUR, SCROLLABLE
+   ========================================================================== */
+.html-code-example {
+    background: transparent;
+    border-radius: 0;
+    overflow: visible;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    position: relative;
+    margin: 30px 0;
+    width: 100%;
+}
+
+/* Titre du code */
+.html-code-header {
+    background: transparent;
+    color: #2c3e50;
+    padding: 0 0 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #e74c3c;
+    margin-bottom: 20px;
+}
+
+.html-code-header span {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #e74c3c;
+}
+
+.html-copy-code-btn {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.html-copy-code-btn:hover {
+    background: rgba(231, 76, 60, 0.2);
+}
+
+/* Bloc de code - DIRECT SUR LE CONTENEUR */
+.html-code-block {
+    margin: 0;
+    padding: 20px;
+    background: #f8f9fa;
+    color: #2c3e50;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 1rem;
+    line-height: 1.6;
+    white-space: pre;
+    overflow: auto;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    min-height: 300px;
+    max-height: 500px;
+    tab-size: 4;
+}
+
+/* Scrollbars minimales */
+.html-code-block::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.html-code-block::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.html-code-block::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 5px;
+}
+
+/* Coloration syntaxique */
+.html-tag {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+.html-attr {
+    color: #3498db;
+}
+
+.html-value {
+    color: #2ecc71;
+}
+
+.html-comment {
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   4. RÉSULTAT VISUEL - DIRECT
+   ========================================================================== */
+.html-result-example {
+    background: transparent;
+    border-radius: 0;
+    padding: 0;
+    margin: 30px 0;
+}
+
+.html-result-header {
+    color: #2c3e50;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3498db;
+}
+
+.html-result-preview {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    min-height: 200px;
+    overflow: auto;
+}
+
+/* ==========================================================================
+   5. NAVIGATION - DIRECT
+   ========================================================================== */
+.html-cours-footer {
+    padding: 50px 0 30px;
+    background: transparent;
+    border-top: 1px solid rgba(231, 76, 60, 0.1);
+    margin-top: 50px;
+}
+
+.html-cours-navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.html-prev-cours, 
+.html-next-cours {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.html-prev-cours:hover, 
+.html-next-cours:hover {
+    background: #c0392b;
+}
+
+/* ==========================================================================
+   6. CONTENEUR D'EXEMPLES - SIMPLE
+   ========================================================================== */
+.html-example-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 100%;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 768px) {
+    .html-cours-article {
+        padding: 0 15px;
+    }
+    
+    .html-cours-header {
+        padding: 40px 0 20px;
+    }
+    
+    .html-cours-title {
+        font-size: 2rem;
+    }
+    
+    .html-cours-section {
+        margin-bottom: 40px;
+    }
+    
+    .html-section-title {
+        font-size: 1.5rem;
+    }
+    
+    .html-code-block {
+        padding: 15px;
+        font-size: 0.95rem;
+        max-height: 400px;
+    }
+    
+    .html-cours-navigation {
+        flex-direction: column;
+    }
+    
+    .html-prev-cours, 
+    .html-next-cours {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .html-cours-title {
+        font-size: 1.7rem;
+    }
+    
+    .html-cours-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .html-section-content li {
+        padding-left: 25px;
+    }
+    
+    .html-code-block {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+}

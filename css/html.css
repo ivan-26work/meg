@@ -1,0 +1,111 @@
+/* Thème rouge pour HTML */
+.html-theme {
+    --primary-color: #e74c3c;
+    --primary-dark: #c0392b;
+    --primary-light: #ff6b6b;
+    --primary-bg: rgba(231, 76, 60, 0.1);
+}
+
+/* Header rouge */
+.html-header .search-bar {
+    border-color: var(--primary-color);
+}
+
+.html-header .search-bar:focus-within {
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+}
+
+/* Onglets rouges */
+.html-tabs-scroll {
+    border-color: var(--primary-light);
+}
+
+.html-tab {
+    border-color: var(--primary-color);
+    color: #333;
+}
+
+.html-tab:hover {
+    background: var(--primary-bg);
+    border-color: var(--primary-dark);
+}
+
+.html-tab.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-dark);
+}
+
+/* Mode boutons */
+.html-mode-btn.active[data-mode="pdf"] {
+    background: var(--primary-color);
+}
+
+.html-mode-btn.active[data-mode="txt"] {
+    background: var(--primary-dark);
+}
+
+/* Cartes PDF rouges */
+.html-pdf-container .pdf-card {
+    border-left-color: var(--primary-color);
+}
+
+.html-pdf-container .pdf-open-btn {
+    background: var(--primary-color);
+}
+
+/* Cartes TXT rouges */
+.html-txt-cards .txt-card {
+    border-left-color: var(--primary-dark);
+}
+
+/* Navigation bas rouge */
+.html-bottom-nav {
+    border-color: var(--primary-color) !important;
+}
+
+.html-nav-link.active {
+    background: var(--primary-color) !important;
+}
+
+.html-nav-link:hover:not(.active) {
+    background: var(--primary-bg) !important;
+}
+
+/* Modal rouge */
+.html-modal-content {
+    border-top: 4px solid var(--primary-color);
+}
+
+.html-modal-close:hover {
+    background: var(--primary-bg);
+    color: var(--primary-color);
+}
+
+/* Loading rouge */
+.html-spinner {
+    border-top-color: var(--primary-color) !important;
+}
+
+/* Welcome message */
+.html-welcome-message i {
+    color: var(--primary-color);
+}
+
+.html-hint {
+    color: var(--primary-dark);
+    border-left: 3px solid var(--primary-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .html-tab {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .html-tab i {
+        margin-right: 5px;
+    }
+}
