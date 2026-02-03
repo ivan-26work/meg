@@ -1,0 +1,36 @@
+TITRE: Créer un bouton CSS avec bordures arrondies
+AUTEUR: MG_ultra
+DATE: 2024
+NIVEAU: Débutant
+CATÉGORIE: CSS - Boutons
+
+## INTRODUCTION
+Les boutons avec bordures arrondies sont essentiels dans le design web moderne. Ils apportent douceur, modernité et améliorent l'expérience utilisateur. CSS offre plusieurs méthodes pour créer ces effets.
+
+## PROPRIÉTÉ CSS PRINCIPALE: border-radius
+La propriété `border-radius` est la clé pour créer des coins arrondis. Elle accepte différentes valeurs :
+
+1. **Valeurs en pixels** : `border-radius: 10px;`
+2. **Valeurs en pourcentage** : `border-radius: 50%;` (cercle parfait)
+3. **Valeurs multiples** : `border-radius: 10px 20px 30px 40px;` (chaque coin différent)
+
+## MÉTHODE 1: BOUTON SIMPLE ARRONDI
+
+```css
+/* Bouton basique avec coins arrondis */
+.bouton-simple {
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bouton-simple:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
