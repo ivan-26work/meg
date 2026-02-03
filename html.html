@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG_ultra - HTML</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/html.css">
+    <link rel="stylesheet" href="./css/pdf.css">
+    <link rel="stylesheet" href="./css/txt.css">
+    <link rel="stylesheet" href="./css/style-html.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/logo.png" type="image/png">
+</head>
+<body>
+    
+    <!-- BARRE DE RECHERCHE FIXE -->
+    <header class="search-header html-header">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" 
+                   id="search-input" 
+                   placeholder="Rechercher dans les cours HTML..."
+                   autocomplete="off"
+                   aria-label="Recherche HTML">
+            <button id="clear-search" class="clear-btn" aria-label="Effacer la recherche">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- BARRE D'ONGLETS PRINCIPALE -->
+    <nav class="main-tabs">
+        <!-- Mode PDF/TXT -->
+        <div class="mode-buttons html-mode-buttons">
+            <button class="mode-btn html-mode-btn" id="btn-pdf" data-mode="pdf">
+                <i class="fas fa-file-pdf"></i> PDF
+            </button>
+            <button class="mode-btn html-mode-btn active" id="btn-txt" data-mode="txt">
+                <i class="fas fa-file-alt"></i> TXT
+            </button>
+        </div>
+        
+        <!-- 10 onglets HTML (scrollable) -->
+        <div class="css-tabs-scroll html-tabs-scroll">
+            <div class="css-tabs html-tabs" id="html-tabs">
+                <!-- 10 ONGLETS HTML -->
+                <button class="css-tab html-tab" data-cours="structure">
+                    <i class="fas fa-code"></i> Structure
+                </button>
+                <button class="css-tab html-tab" data-cours="headings">
+                    <i class="fas fa-heading"></i> Headings
+                </button>
+                <button class="css-tab html-tab" data-cours="paragraphs">
+                    <i class="fas fa-paragraph"></i> Paragraphs
+                </button>
+                <button class="css-tab html-tab" data-cours="links">
+                    <i class="fas fa-link"></i> Links
+                </button>
+                <button class="css-tab html-tab" data-cours="images">
+                    <i class="fas fa-image"></i> Images
+                </button>
+                <button class="css-tab html-tab" data-cours="lists">
+                    <i class="fas fa-list"></i> Lists
+                </button>
+                <button class="css-tab html-tab" data-cours="tables">
+                    <i class="fas fa-table"></i> Tables
+                </button>
+                <button class="css-tab html-tab" data-cours="forms">
+                    <i class="fas fa-edit"></i> Forms
+                </button>
+                <button class="css-tab html-tab" data-cours="semantic">
+                    <i class="fas fa-sitemap"></i> Semantic
+                </button>
+                <button class="css-tab html-tab" data-cours="multimedia">
+                    <i class="fas fa-play-circle"></i> Multimedia
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ZONE DE CONTENU PRINCIPAL -->
+    <main class="content-main">
+        
+        <!-- SECTION PDF -->
+        <section id="section-pdf" class="content-section" style="display: none;">
+            <div id="pdf-container" class="pdf-container html-pdf-container">
+                <div class="loading">
+                    <div class="spinner html-spinner"></div>
+                    <p>Chargement des PDFs HTML...</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SECTION TXT -->
+        <section id="section-txt" class="content-section" style="display: flex; flex-direction: column;">
+            <!-- Cartes des fichiers TXT (visible par défaut) -->
+            <div id="txt-cards-container" class="txt-cards-container html-txt-cards">
+                <div id="txt-cards-grid" class="txt-cards-grid">
+                    <div class="loading">
+                        <div class="spinner html-spinner"></div>
+                        <p>Chargement des fichiers HTML TXT...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conteneur des cours (caché par défaut, occupe tout l'espace quand visible) -->
+            <div id="cours-container" class="cours-container" style="display: none;">
+                <!-- Contenu des cours injecté ici -->
+                <div class="welcome-message html-welcome-message">
+                    <i class="fab fa-html5 fa-3x"></i>
+                    <h2>Bienvenue dans les cours HTML</h2>
+                    <p>Sélectionnez un onglet ci-dessus pour apprendre le HTML.</p>
+                    <div class="hint html-hint">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>Les 10 concepts HTML les plus importants</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- MODAL PLEIN ÉCRAN POUR TXT -->
+        <div id="txt-modal" class="txt-modal html-modal" style="display: none;">
+            <div class="modal-content html-modal-content">
+                <button class="modal-close html-modal-close" id="close-txt-modal" aria-label="Fermer">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 id="txt-modal-title" class="modal-title"></h2>
+                <div class="modal-body" id="txt-modal-content">
+                    <!-- Contenu TXT formaté injecté ici -->
+                </div>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- BARRE DE NAVIGATION BAS -->
+    <footer class="bottom-nav html-bottom-nav">
+        <div class="nav-container">
+            <!-- HTML : Page actuelle -->
+            <a href="#" class="nav-link active html-nav-link" id="nav-html" data-page="html">
+                <i class="fab fa-html5"></i>
+                <span>HTML</span>
+            </a>
+            
+            <!-- HOME : Lien vers index.html -->
+            <a href="index.html" class="nav-link html-nav-link" id="nav-home" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>HOME</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- OVERLAY POUR MODAL -->
+    <div id="modal-overlay" class="modal-overlay" style="display: none;"></div>
+
+    <!-- SCRIPTS -->
+    <!-- Librairies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- Scripts généraux -->
+    <script src="./js/global.js"></script>
+    
+    <!-- Scripts spécifiques HTML -->
+    <script src="./js/html-pdf.js"></script>
+    <script src="./js/html-txt.js"></script>
+    <script src="./js/html-cours.js"></script>
+    
+    <!-- Initialisation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page HTML initialisée');
+            
+            // Initialiser le mode TXT par défaut
+            setTimeout(() => {
+                const txtModeBtn = document.getElementById('btn-txt');
+                if (txtModeBtn) {
+                    txtModeBtn.click();
+                }
+            }, 100);
+        });
+        
+    </script>
+    
+</body>
+</html>
