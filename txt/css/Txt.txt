@@ -1,1 +1,141 @@
+/* Réduction de 50% de la taille des cartes TXT */
 
+.txt-card {
+    /* Réduction générale */
+    padding: 12px !important; /* 25px → 12px (52% moins) */
+    border-radius: 12px !important; /* 20px → 12px */
+    border-left-width: 3px !important; /* 5px → 3px */
+}
+
+/* En-tête réduit */
+.txt-card-header {
+    margin-bottom: 12px !important; /* 20px → 12px */
+    gap: 8px !important; /* 15px → 8px */
+}
+
+.txt-card-icon {
+    width: 35px !important; /* 50px → 35px (30% moins) */
+    height: 35px !important;
+    font-size: 18px !important; /* 28px → 18px */
+    border-radius: 8px !important; /* 12px → 8px */
+}
+
+.txt-card-title {
+    font-size: 1rem !important; /* 1.3rem → 1rem (23% moins) */
+    -webkit-line-clamp: 1 !important; /* 2 → 1 ligne */
+}
+
+/* Prévisualisation réduite */
+.txt-card-preview {
+    margin-bottom: 12px !important; /* 20px → 12px */
+    padding: 10px !important; /* 15px → 10px */
+    min-height: 60px !important; /* 100px → 60px (40% moins) */
+    border-radius: 8px !important; /* 12px → 8px */
+}
+
+.txt-card-preview::before {
+    height: 2px !important; /* 4px → 2px */
+}
+
+.txt-preview-text {
+    font-size: 0.85rem !important; /* 0.95rem → 0.85rem */
+    -webkit-line-clamp: 2 !important; /* 4 → 2 lignes */
+    line-height: 1.4 !important; /* 1.6 → 1.4 */
+}
+
+/* Effet de dégradé plus petit */
+.txt-card-preview::after {
+    height: 15px !important; /* 30px → 15px */
+}
+
+/* Pied de page réduit */
+.txt-card-footer {
+    padding-top: 8px !important; /* 15px → 8px */
+}
+
+.txt-file-size {
+    font-size: 0.75rem !important; /* 0.85rem → 0.75rem */
+    padding: 3px 8px !important; /* 5px 12px → 3px 8px */
+}
+
+.txt-open-btn {
+    width: 30px !important; /* 40px → 30px (25% moins) */
+    height: 30px !important;
+}
+
+.txt-open-btn i {
+    font-size: 1rem !important; /* 1.2rem → 1rem */
+}
+
+/* Réduction de l'ombre au survol */
+.txt-card:hover {
+    transform: translateY(-4px) !important; /* -8px → -4px */
+    box-shadow: 8px 8px 16px #b8bec7,
+                -8px -8px 16px #ffffff !important; /* Réduit de 12px à 8px */
+}
+
+/* Ajustement de la grille pour plus de cartes */
+.txt-cards-grid {
+    gap: 12px !important; /* 20px → 12px (40% moins) */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; /* 280px → 200px (29% moins) */
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    .txt-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+        gap: 8px !important;
+    }
+    
+    .txt-card {
+        padding: 8px !important;
+    }
+    
+    .txt-card-icon {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+    }
+    
+    .txt-card-preview {
+        min-height: 50px !important;
+        padding: 8px !important;
+    }
+    
+    .txt-preview-text {
+        font-size: 0.8rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .txt-cards-grid {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .txt-card {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        padding: 10px !important;
+    }
+    
+    .txt-card-header {
+        flex: 1 !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .txt-card-preview {
+        display: none !important; /* Cache la prévisualisation sur mobile */
+    }
+    
+    .txt-card-footer {
+        border-top: none !important;
+        padding-top: 0 !important;
+        flex-direction: column !important;
+        gap: 5px !important;
+    }
+    
+    .txt-file-size {
+        font-size: 0.7rem !important;
+    }
+}
