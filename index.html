@@ -3,37 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG_ultra - HTML</title>
+    <title>MG_ultra - Apprentissage Web Interactif</title>
     
-    <!-- Styles -->
+    <!-- STYLES GLOBAUX -->
     <link rel="stylesheet" href="./css/global.css">
-    
+    <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Favicon -->
+    <!-- STYLES PAR ONGLET (chargés dynamiquement) -->
+    <link id="css-tab-style" rel="stylesheet" href="./css/css.css" disabled>
+    <link id="html-tab-style" rel="stylesheet" href="./css/html-2.css" disabled>
+    <link id="jeux-tab-style" rel="stylesheet" href="./css/jeux.css" disabled>
+    <link id="codage-tab-style" rel="stylesheet" href="./css/codage.css" disabled>
+    <link id="moi-tab-style" rel="stylesheet" href="./css/moi.css" disabled>
+    
+    <!-- FAVICON -->
     <link rel="icon" href="./assets/logo.png" type="image/png">
 </head>
-<body>
+<body class="home-theme">
     
+    <!-- ===== SIDEBAR (Menu latéral) ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="user-profile" id="user-profile">
+                <!-- Contenu injecté dynamiquement selon connexion -->
+                <div class="profile-default">
+                    <div class="profile-circle">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="profile-name">Connectez-vous</span>
+                </div>
+            </div>
+            <button class="sidebar-close" id="sidebar-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-content">
+            <!-- Groupe 1 : Thème et Partage -->
+            <div class="sidebar-group">
+                <h3 class="sidebar-group-title">Préférences</h3>
+                <div class="theme-toggle">
+                    <span class="toggle-label">
+                        <i class="fas fa-moon"></i> Mode Nuit
+                    </span>
+                    <label class="switch">
+                        <input type="checkbox" id="theme-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <button class="sidebar-btn share-btn">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Partager le site</span>
+                </button>
+            </div>
+            
+            <!-- Groupe 2 : Pages -->
+            <div class="sidebar-group">
+                <h3 class="sidebar-group-title">Informations</h3>
+                <a href="aide.html" class="sidebar-btn">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Aide</span>
+                </a>
+                <a href="apropos.html" class="sidebar-btn">
+                    <i class="fas fa-info-circle"></i>
+                    <span>À propos</span>
+                </a>
+                <a href="contact.html" class="sidebar-btn">
+                    <i class="fas fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+                <a href="confi.html" class="sidebar-btn">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Confidentialité</span>
+                </a>
+            </div>
+            
+            <!-- Groupe 3 : Connexion/Auth -->
+            <div class="sidebar-group" id="auth-group">
+                <h3 class="sidebar-group-title">Compte</h3>
+                <a href="auth.html" class="sidebar-btn auth-btn" id="auth-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Connexion / Inscription</span>
+                </a>
+            </div>
+            
+            <!-- Footer Sidebar -->
+            <div class="sidebar-footer">
+                <div class="powered-by">
+                    <i class="fas fa-code"></i>
+                    <span>Powered by MEG</span>
+                </div>
+                <div class="version">v1.0.0</div>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- ===== OVERLAY SIDEBAR ===== -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-    <!-- BARRE DE NAVIGATION BAS -->
+    <!-- ===== HEADER PRINCIPAL ===== -->
+    <header class="home-header">
+        <div class="header-container">
+            <!-- Hamburger gauche -->
+            <button class="hamburger-btn" id="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- Barre de recherche centre (petite) -->
+            <div class="header-search">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Rechercher..." id="home-search">
+                    <button class="clear-btn hidden">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Logo droite -->
+            <div class="header-logo">
+                <img src="./assets/logo.png" alt="MG_ultra Logo" class="logo-img">
+            </div>
+        </div>
+        
+        <!-- Barre d'onglets scrollable -->
+        <nav class="header-tabs">
+            <div class="tabs-scroll-container">
+                <div class="tabs-container">
+                    <button class="tab-btn pill-btn active" data-tab="css">
+                        <i class="fab fa-css3-alt"></i>
+                        <span>CSS</span>
+                    </button>
+                    
+                    <button class="tab-btn pill-btn" data-tab="html">
+                        <i class="fab fa-html5"></i>
+                        <span>HTML</span>
+                    </button>
+                    
+                    <button class="tab-btn pill-btn" data-tab="jeux">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Jeux</span>
+                    </button>
+                    
+                    <button class="tab-btn pill-btn" data-tab="codage">
+                        <i class="fas fa-code"></i>
+                        <span>Codage</span>
+                    </button>
+                    
+                    <button class="tab-btn pill-btn" data-tab="moi">
+                        <i class="fas fa-user"></i>
+                        <span>Moi</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===== CONTENU PRINCIPAL ===== -->
+    <main class="home-main">
+        <div class="content-container">
+            
+            <!-- Section documentation développement web -->
+            <section class="doc-section" id="main-doc">
+                
+                
+                <div class="doc-content">
+                    <!-- Contenu CSS -->
+                    <div class="tab-content active" id="css-content">
+                        <div class="tab-content-inner" id="css-content-inner">
+                            <!-- Contenu injecté par css.js -->
+                            <div class="loading-content">
+                                <div class="loading-spinner"></div>
+                                <p>Chargement du contenu CSS...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenu HTML -->
+                    <div class="tab-content" id="html-content">
+                        <div class="tab-content-inner" id="html-content-inner">
+                            <!-- Contenu injecté par html.js -->
+                            <div class="loading-content">
+                                <div class="loading-spinner"></div>
+                                <p>Chargement du contenu HTML...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenu Jeux -->
+                    <div class="tab-content" id="jeux-content">
+                        <div class="tab-content-inner" id="jeux-content-inner">
+                            <!-- Contenu injecté par jeux.js -->
+                            <div class="loading-content">
+                                <div class="loading-spinner"></div>
+                                <p>Chargement des jeux interactifs...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenu Codage -->
+                    <div class="tab-content" id="codage-content">
+                        <div class="tab-content-inner" id="codage-content-inner">
+                            <!-- Contenu injecté par codage.js -->
+                            <div class="loading-content">
+                                <div class="loading-spinner"></div>
+                                <p>Chargement de l'environnement de codage...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenu Moi -->
+                    <div class="tab-content" id="moi-content">
+                        <div class="tab-content-inner" id="moi-content-inner">
+                            <!-- Contenu injecté par moi.js -->
+                            <div class="loading-content">
+                                <div class="loading-spinner"></div>
+                                <p>Chargement du dashboard personnel...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+    </main>
+
+    <!-- ===== BARRE DE NAVIGATION BAS ===== -->
     <footer class="bottom-nav">
         <div class="nav-container">
-            <!-- HTML : Page actuelle -->
-            
-            <!-- HOME : Lien vers index.html -->
-            <a href="css.html" class="nav-link" id="nav-home" data-page="home">
-                <i class="fas fa-css3"></i>
+            <a href="css.html" class="nav-link" id="nav-css" data-page="css">
+                <i class="fab fa-css3-alt"></i>
                 <span>CSS</span>
             </a>
-            <!-- HOME : Lien vers index.html -->
-            <a href="html.html" class="nav-link" id="nav-home" data-page="home">
-                <i class="fas fa-html5"></i>
+            
+            <a href="html.html" class="nav-link" id="nav-html" data-page="html">
+                <i class="fab fa-html5"></i>
                 <span>HTML</span>
+            </a>
+            
+            <a href="index.html" class="nav-link active" id="nav-home" data-page="home">
+                <i class="fas fa-home"></i>
+                <span>HOME</span>
             </a>
         </div>
     </footer>
 
+    <!-- ===== SCRIPTS ===== -->
+    <!-- Scripts généraux -->
+    <script src="./js/global.js"></script>
+    <script src="./js/index.js"></script>
+    
+    <!-- Scripts des onglets (chargés dynamiquement) -->
+    <script src="./js/css.js" defer></script>
+    <script src="./js/html.js" defer></script>
+    <script src="./js/jeux.js" defer></script>
+    <script src="./js/codage.js" defer></script>
+    <script src="./js/moi.js" defer></script>
+    
+    <!-- Firebase (pour authentification) -->
+    <script type="module" src="./js/auth/firebase-config.js"></script>
     
 </body>
 </html>

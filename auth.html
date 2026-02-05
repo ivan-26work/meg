@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG_ultra - Authentification</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./css/global.css">
+    <link rel="stylesheet" href="./css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/logo.png" type="image/png">
+</head>
+<body class="auth-theme">
+    
+    <!-- ===== HEADER ===== -->
+    <header class="auth-header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="header-logo">
+                <img src="./assets/logo.png" alt="MG_ultra Logo" class="logo-img">
+                <h1 class="site-title">MG_ultra</h1>
+            </div>
+        </div>
+        
+        <!-- Barre d'onglets -->
+        <nav class="auth-tabs">
+            <div class="tabs-container">
+                <button class="auth-tab-btn active" data-tab="connexion">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Connexion</span>
+                </button>
+                
+                <button class="auth-tab-btn" data-tab="inscription">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Inscription</span>
+                </button>
+                
+                <button class="auth-tab-btn google-tab" data-tab="google">
+                    <i class="fab fa-google"></i>
+                    <span>Google</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===== CONTENU PRINCIPAL ===== -->
+    <main class="auth-main">
+        <div class="auth-container">
+            
+            <!-- Conteneur dynamique pour les formulaires -->
+            <div class="forms-container">
+                
+                <!-- Formulaire de CONNEXION (actif par défaut) -->
+                <form class="auth-form active" id="connexion-form" data-form="connexion">
+                    <div class="form-header">
+                        <h2 class="form-title">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Connexion à votre compte
+                        </h2>
+                        <p class="form-subtitle">Accédez à votre espace personnel</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-email" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Adresse email
+                        </label>
+                        <input type="email" 
+                               id="login-email" 
+                               class="form-input"
+                               placeholder="exemple@email.com"
+                               required
+                               autocomplete="email">
+                        <div class="input-error" id="login-email-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Mot de passe
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" 
+                                   id="login-password" 
+                                   class="form-input password-input"
+                                   placeholder="Votre mot de passe"
+                                   required
+                                   autocomplete="current-password">
+                            <button type="button" class="password-toggle" data-target="login-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="input-error" id="login-password-error"></div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark"></span>
+                            Se souvenir de moi
+                        </label>
+                        <a href="#" class="forgot-password" id="forgot-password-link">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="login-submit">
+                        <span class="btn-text">Se connecter</span>
+                        <div class="btn-loader">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                    
+                    <div class="form-footer">
+                        <p>Pas encore de compte ? 
+                            <a href="#" class="switch-form" data-switch-to="inscription">
+                                S'inscrire
+                            </a>
+                        </p>
+                    </div>
+                </form>
+                
+                <!-- Formulaire d'INSCRIPTION -->
+                <form class="auth-form" id="inscription-form" data-form="inscription">
+                    <div class="form-header">
+                        <h2 class="form-title">
+                            <i class="fas fa-user-plus"></i>
+                            Créer un compte
+                        </h2>
+                        <p class="form-subtitle">Rejoignez la communauté MG_ultra</p>
+                    </div>
+                    
+                    <div class="name-group">
+                        <div class="form-group half">
+                            <label for="signup-firstname" class="form-label">
+                                <i class="fas fa-user"></i>
+                                Prénom
+                            </label>
+                            <input type="text" 
+                                   id="signup-firstname" 
+                                   class="form-input"
+                                   placeholder="Votre prénom"
+                                   required
+                                   autocomplete="given-name">
+                            <div class="input-error" id="signup-firstname-error"></div>
+                        </div>
+                        
+                        <div class="form-group half">
+                            <label for="signup-lastname" class="form-label">
+                                <i class="fas fa-user"></i>
+                                Nom
+                            </label>
+                            <input type="text" 
+                                   id="signup-lastname" 
+                                   class="form-input"
+                                   placeholder="Votre nom"
+                                   required
+                                   autocomplete="family-name">
+                            <div class="input-error" id="signup-lastname-error"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email" class="form-label">
+                            <i class="fas fa-envelope"></i>
+                            Adresse email
+                        </label>
+                        <input type="email" 
+                               id="signup-email" 
+                               class="form-input"
+                               placeholder="exemple@email.com"
+                               required
+                               autocomplete="email">
+                        <div class="input-error" id="signup-email-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-password" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Mot de passe
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" 
+                                   id="signup-password" 
+                                   class="form-input password-input"
+                                   placeholder="Créez un mot de passe"
+                                   required
+                                   autocomplete="new-password">
+                            <button type="button" class="password-toggle" data-target="signup-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-requirements">
+                            <small>Le mot de passe doit contenir au moins 8 caractères</small>
+                        </div>
+                        <div class="input-error" id="signup-password-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-confirm" class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Confirmer le mot de passe
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" 
+                                   id="signup-confirm" 
+                                   class="form-input password-input"
+                                   placeholder="Confirmez votre mot de passe"
+                                   required
+                                   autocomplete="new-password">
+                            <button type="button" class="password-toggle" data-target="signup-confirm">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="input-error" id="signup-confirm-error"></div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms-agreement" required>
+                            <span class="checkmark"></span>
+                            J'accepte les 
+                            <a href="./confi.html" target="_blank">conditions d'utilisation</a>
+                            et la 
+                            <a href="./confi.html" target="_blank">politique de confidentialité</a>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="signup-submit">
+                        <span class="btn-text">S'inscrire</span>
+                        <div class="btn-loader">
+                            <div class="spinner"></div>
+                        </div>
+                    </button>
+                    
+                    <div class="form-footer">
+                        <p>Déjà un compte ? 
+                            <a href="#" class="switch-form" data-switch-to="connexion">
+                                Se connecter
+                            </a>
+                        </p>
+                    </div>
+                </form>
+                
+                <!-- Section GOOGLE -->
+                <div class="auth-form google-form" id="google-form" data-form="google">
+                    <div class="form-header">
+                        <h2 class="form-title">
+                            <i class="fab fa-google"></i>
+                            Connexion avec Google
+                        </h2>
+                        <p class="form-subtitle">Accédez rapidement avec votre compte Google</p>
+                    </div>
+                    
+                    <div class="google-content">
+                        <div class="google-icon">
+                            <i class="fab fa-google fa-3x"></i>
+                        </div>
+                        
+                        <p class="google-description">
+                            En cliquant sur "Continuer avec Google", vous serez redirigé vers la page 
+                            d'authentification Google pour vous connecter ou créer un compte.
+                        </p>
+                        
+                        <div class="google-benefits">
+                            <h4>Avantages :</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Connexion rapide en un clic</li>
+                                <li><i class="fas fa-check"></i> Pas besoin de mémoriser un mot de passe</li>
+                                <li><i class="fas fa-check"></i> Informations de profil automatiques</li>
+                                <li><i class="fas fa-check"></i> Sécurisé par Google</li>
+                            </ul>
+                        </div>
+                        
+                        <button type="button" class="google-btn" id="google-auth-btn">
+                            <i class="fab fa-google"></i>
+                            <span>Continuer avec Google</span>
+                        </button>
+                        
+                        <div class="form-footer">
+                            <p>Vous préférez créer un compte manuellement ? 
+                                <a href="#" class="switch-form" data-switch-to="inscription">
+                                    S'inscrire
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Messages d'état -->
+            <div class="auth-messages">
+                <div class="message success" id="success-message">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="message-content">
+                        <h4>Succès !</h4>
+                        <p id="success-text"></p>
+                    </div>
+                    <button class="message-close"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <div class="message error" id="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <div class="message-content">
+                        <h4>Erreur</h4>
+                        <p id="error-text"></p>
+                    </div>
+                    <button class="message-close"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="auth-footer">
+        <div class="footer-content">
+            <p class="copyright">
+                &copy; 2023 MG_ultra. Tous droits réservés.
+            </p>
+            <div class="footer-links">
+                <a href="./aide.html">Aide</a>
+                <a href="./apropos.html">À propos</a>
+                <a href="./contact.html">Contact</a>
+                <a href="./confi.html">Confidentialité</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="./js/auth.js"></script>
+    
+</body>
+</html>
