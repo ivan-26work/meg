@@ -1,0 +1,495 @@
+/* ===== ENVIRONNEMENT DE CODAGE ===== */
+.codage-container {
+    background: var(--home-bg);
+    border-radius: 20px;
+    box-shadow: 12px 12px 24px var(--home-shadow-dark),
+                -12px -12px 24px var(--home-shadow-light);
+    border: 2px solid rgba(163, 177, 198, 0.1);
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* Important pour l'expansion */
+    margin-bottom: 30px;
+    transition: min-height 0.3s ease;
+}
+
+/* Header du codage */
+.codage-header {
+    padding: 15px 25px;
+    border-bottom: 1px solid rgba(163, 177, 198, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px 20px 0 0;
+    flex-shrink: 0;
+}
+
+.codage-timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--home-text);
+    font-size: 1.1rem;
+}
+
+.codage-timer i {
+    color: var(--home-primary);
+    font-size: 1.2rem;
+}
+
+#timer-display {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    background: var(--home-bg);
+    padding: 5px 12px;
+    border-radius: 8px;
+    box-shadow: inset 3px 3px 6px var(--home-shadow-dark),
+                inset -3px -3px 6px var(--home-shadow-light);
+    min-width: 85px;
+    text-align: center;
+}
+
+.codage-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.codage-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: var(--home-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 4px 4px 8px var(--home-shadow-dark),
+                -4px -4px 8px var(--home-shadow-light);
+    transition: all 0.3s ease;
+    color: var(--home-text-light);
+    font-size: 1.2rem;
+}
+
+.codage-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px var(--home-shadow-dark),
+                -6px -6px 12px var(--home-shadow-light);
+}
+
+.codage-btn:active {
+    transform: translateY(0);
+    box-shadow: inset 3px 3px 6px var(--home-shadow-dark),
+                inset -3px -3px 6px var(--home-shadow-light);
+}
+
+.preview-btn {
+    color: var(--home-secondary);
+}
+
+.preview-btn:hover {
+    color: #27ae60;
+}
+
+.save-btn {
+    color: var(--home-primary);
+}
+
+.save-btn:hover {
+    color: #2980b9;
+}
+
+/* Conteneur éditeur - S'ADAPTE À LA HAUTEUR DU CONTENU */
+.codage-editor {
+    flex: 1;
+    min-height: 500px; /* Hauteur minimale */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: visible; /* Pas de scroll interne */
+}
+
+/* Grille des éditeurs - S'EXPAND AVEC LE CONTENU */
+.editor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    flex: 1;
+    min-height: 0; /* Important pour flex */
+    align-items: stretch; /* Les deux éditeurs ont même hauteur */
+}
+
+/* Section éditeur individuelle - HAUTEUR DYNAMIQUE */
+.editor-section {
+    background: var(--home-bg);
+    border-radius: 15px;
+    box-shadow: inset 5px 5px 10px var(--home-shadow-dark),
+                inset -5px -5px 10px var(--home-shadow-light);
+    border: 1px solid rgba(163, 177, 198, 0.2);
+    display: flex;
+    flex-direction: column;
+    min-height: 400px; /* Hauteur minimale */
+    height: auto; /* S'adapte au contenu */
+    overflow: visible; /* Pas de scroll fixe */
+}
+
+/* Header de l'éditeur */
+.editor-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(163, 177, 198, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    color: var(--home-text);
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px 15px 0 0;
+    flex-shrink: 0;
+}
+
+.html-editor .editor-header {
+    color: #e74c3c;
+}
+
+.html-editor .editor-header i {
+    color: #e74c3c;
+}
+
+.css-editor .editor-header {
+    color: var(--home-primary);
+}
+
+.css-editor .editor-header i {
+    color: var(--home-primary);
+}
+
+/* Wrapper éditeur - S'EXPAND AVEC LE TEXTE */
+.editor-wrapper {
+    flex: 1;
+    display: flex;
+    position: relative;
+    min-height: 300px;
+    height: auto; /* Hauteur automatique */
+    overflow: visible; /* Important */
+}
+
+/* Numéros de ligne */
+.line-numbers {
+    padding: 15px 10px;
+    background: rgba(0, 0, 0, 0.02);
+    border-right: 1px solid rgba(163, 177, 198, 0.3);
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--home-text-light);
+    text-align: right;
+    white-space: pre;
+    user-select: none;
+    min-width: 40px;
+    flex-shrink: 0;
+    overflow-y: hidden; /* Cache la scrollbar */
+    height: auto; /* S'adapte au contenu */
+    align-self: flex-start; /* Commence en haut */
+}
+
+/* Zone d'édition de code - HAUTEUR DYNAMIQUE */
+.code-editor {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--home-text);
+    resize: none; /* Pas de redimensionnement manuel */
+    outline: none;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: auto; /* Scroll horizontal si besoin */
+    overflow-y: hidden; /* Pas de scroll vertical interne */
+    min-height: 300px;
+    height: auto; /* S'adapte au nombre de lignes */
+    tab-size: 4;
+}
+
+.code-editor::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.code-editor::-webkit-scrollbar-track {
+    background: rgba(184, 190, 199, 0.1);
+    border-radius: 4px;
+}
+
+.code-editor::-webkit-scrollbar-thumb {
+    background: rgba(125, 141, 166, 0.3);
+    border-radius: 4px;
+}
+
+.code-editor::-webkit-scrollbar-thumb:hover {
+    background: rgba(125, 141, 166, 0.5);
+}
+
+/* Placeholder */
+.code-editor::placeholder {
+    color: rgba(125, 141, 166, 0.5);
+    font-style: italic;
+}
+
+/* ===== PRÉVISUALISATION ===== */
+.codage-preview {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    min-height: 500px;
+}
+
+.preview-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(163, 177, 198, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: var(--home-text);
+    font-size: 1.1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px 15px 0 0;
+    margin-bottom: 20px;
+}
+
+.preview-header i {
+    color: var(--home-primary);
+    margin-right: 10px;
+}
+
+.preview-back-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--home-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 4px 4px 8px var(--home-shadow-dark),
+                -4px -4px 8px var(--home-shadow-light);
+    transition: all 0.3s ease;
+    color: var(--home-text-light);
+}
+
+.preview-back-btn:hover {
+    transform: translateY(-2px);
+    color: var(--home-primary);
+}
+
+.preview-frame {
+    flex: 1;
+    border: none;
+    background: white;
+    border-radius: 10px;
+    box-shadow: inset 3px 3px 6px var(--home-shadow-dark),
+                inset -3px -3px 6px var(--home-shadow-light);
+    min-height: 400px;
+}
+
+/* ===== INDICATEUR DE SAUVEGARDE ===== */
+.save-indicator {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    background: var(--home-secondary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.save-indicator.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.save-indicator i {
+    font-size: 1.1rem;
+}
+
+/* ===== RÉGLAGES DYNAMIQUES ===== */
+
+/* Classe qui sera ajoutée dynamiquement quand le code est long */
+.codage-container.expanded {
+    min-height: 800px; /* Augmente la hauteur minimale */
+}
+
+/* Ajustement automatique de la hauteur des textareas */
+.code-editor.auto-height {
+    height: auto;
+    min-height: 50px; /* Hauteur minimale très basse */
+}
+
+/* Pour les très longs codes, permettre le scroll sur le conteneur principal */
+@media (min-height: 800px) {
+    .codage-container {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 992px) {
+    .editor-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .editor-section {
+        min-height: 350px;
+    }
+    
+    .codage-container {
+        min-height: 800px; /* Plus grand sur tablette */
+    }
+}
+
+@media (max-width: 768px) {
+    .codage-header {
+        padding: 12px 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .codage-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .editor-section {
+        min-height: 300px;
+    }
+    
+    .code-editor {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+    
+    .line-numbers {
+        font-size: 0.9rem;
+        padding: 12px 8px;
+        min-width: 35px;
+    }
+    
+    .codage-container {
+        min-height: 700px;
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .codage-editor {
+        padding: 15px;
+    }
+    
+    .editor-header {
+        padding: 12px 15px;
+        font-size: 1rem;
+    }
+    
+    .editor-section {
+        min-height: 250px;
+    }
+    
+    .code-editor {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    .line-numbers {
+        font-size: 0.85rem;
+        min-width: 30px;
+    }
+    
+    .codage-container {
+        min-height: 600px;
+        border-radius: 15px;
+    }
+    
+    .save-indicator {
+        bottom: 80px;
+        right: 20px;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulseSave {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.save-btn.saving {
+    animation: pulseSave 0.5s ease;
+}
+
+/* ===== THÈME SOMBRE ===== */
+@media (prefers-color-scheme: dark) {
+    .codage-container,
+    .editor-section,
+    .codage-btn,
+    .preview-back-btn {
+        background: #2d2d2d;
+        box-shadow: 8px 8px 16px #0a0a0a,
+                    -8px -8px 16px #2a2a2a;
+    }
+    
+    .code-editor {
+        color: #e0e0e0;
+        background: transparent;
+    }
+    
+    .line-numbers {
+        background: rgba(0, 0, 0, 0.1);
+        color: #7d8da6;
+    }
+    
+    .preview-frame {
+        background: #1a1a1a;
+    }
+    
+    .editor-header {
+        background: rgba(255, 255, 255, 0.02);
+    }
+}
+
+/* ===== UTILITAIRES ===== */
+.search-highlight {
+    background-color: rgba(255, 235, 59, 0.3);
+    padding: 1px 3px;
+    border-radius: 3px;
+}
+
+/* Désactiver les animations si préféré */
+@media (prefers-reduced-motion: reduce) {
+    .codage-container,
+    .codage-btn,
+    .save-indicator,
+    .preview-back-btn {
+        transition: none;
+        animation: none;
+    }
+}
