@@ -1,364 +1,475 @@
-/* style-html.css - Zéro cadre, tout direct sur le conteneur */
+/* ===== STYLE-HTML.CSS - Cours HTML néomorphique ===== */
+/* Design : Neumorphisme - Ombre douce, effet matière */
 
-/* ==========================================================================
-   CONTENEUR DES COURS - PLEIN ÉCRAN SANS CADRE
-   ========================================================================== */
-#cours-container {
-    display: none;
-    width: 100%;
-    padding: 0;
-    background: #f8f9fa;
-    min-height: calc(100vh - 180px);
+:root {
+    /* Variables néomorphiques */
+    --html-bg: #e0e5ec;
+    --html-primary: #e74c3c;
+    --html-primary-light: #ff6b5b;
+    --html-primary-dark: #c0392b;
+    --html-text: #2c3e50;
+    --html-text-light: #7f8c8d;
+    --html-shadow-dark: #b8bec7;
+    --html-shadow-light: #ffffff;
+    --html-success: #2ecc71;
+    --html-warning: #f39c12;
+    --html-info: #3498db;
+    --html-code-bg: #1e1e1e;
+    --html-card-bg: #e0e5ec;
 }
 
-#cours-container[style*="display: block"] {
-    display: block;
-}
-
-/* ==========================================================================
-   ARTICLE DE COURS - DIRECT SUR LE CONTENEUR
-   ========================================================================== */
+/* ===== CONTENEUR PRINCIPAL ===== */
 .html-cours-article {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 20px;
-    background: transparent;
+    padding: 20px;
+    background: var(--html-bg);
+    border-radius: 30px;
+    box-shadow: 12px 12px 24px var(--html-shadow-dark),
+                -12px -12px 24px var(--html-shadow-light);
+    transition: all 0.3s ease;
 }
 
-/* ==========================================================================
-   1. TITRE PRINCIPAL - DIRECT
-   ========================================================================== */
-.html-cours-header {
-    padding: 50px 0 30px;
-    background: transparent;
-    color: #2c3e50;
-    text-align: center;
-    position: relative;
-    margin-bottom: 40px;
-}
-
+/* ===== TITRE PRINCIPAL ===== */
 .html-cours-title {
-    font-size: 2.5rem;
+    color: var(--html-text);
+    font-size: 2.2em;
     margin: 0 0 15px 0;
-    font-weight: 800;
-    line-height: 1.1;
-    color: #e74c3c;
+    padding-bottom: 15px;
+    border-bottom: 4px solid var(--html-primary);
+    position: relative;
+    font-weight: 700;
+    letter-spacing: -0.5px;
 }
 
+.html-cours-title::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: var(--html-primary-light);
+    border-radius: 4px;
+}
+
+/* ===== MÉTA-INFORMATIONS ===== */
 .html-cours-meta {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    font-size: 1rem;
-    color: #7f8c8d;
-}
-
-.html-cours-category, 
-.html-cours-difficulty {
-    background: rgba(231, 76, 60, 0.1);
-    color: #e74c3c;
-    padding: 8px 20px;
-    border-radius: 20px;
-}
-
-/* ==========================================================================
-   2. CONTENU DES SECTIONS - DIRECT
-   ========================================================================== */
-.html-cours-section {
-    padding: 0;
-    width: 100%;
-    margin-bottom: 50px;
-}
-
-/* Titres de section */
-.html-section-title {
-    color: #2c3e50;
-    font-size: 1.8rem;
-    margin: 0 0 25px 0;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
     gap: 15px;
-    padding-bottom: 10px;
-}
-
-.html-section-title i {
-    color: #e74c3c;
-    font-size: 1.4rem;
-}
-
-/* Contenu texte */
-.html-section-content {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: #34495e;
     margin-bottom: 30px;
 }
 
-.html-section-content p {
-    margin-bottom: 20px;
+.html-cours-category,
+.html-cours-difficulty {
+    background: var(--html-bg);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.9em;
+    font-weight: 600;
+    box-shadow: 4px 4px 8px var(--html-shadow-dark),
+                -4px -4px 8px var(--html-shadow-light);
+    color: var(--html-text);
 }
 
-/* Listes */
-.html-section-content ul {
-    margin: 20px 0 20px 25px;
-    padding: 0;
-    list-style-type: none;
+.html-cours-category {
+    border-left: 3px solid var(--html-primary);
 }
 
-.html-section-content li {
-    margin-bottom: 12px;
-    padding-left: 30px;
-    position: relative;
+.html-cours-difficulty {
+    border-left: 3px solid var(--html-success);
 }
 
-.html-section-content li::before {
-    content: '•';
-    position: absolute;
-    left: 0;
-    color: #e74c3c;
-    font-size: 1.5rem;
-    line-height: 1;
+/* ===== SECTIONS DE COURS ===== */
+.html-cours-section {
+    margin-bottom: 40px;
+    animation: slideIn 0.4s ease;
 }
 
-/* ==========================================================================
-   3. CODE - DIRECT SUR LE CONTENEUR, SCROLLABLE
-   ========================================================================== */
-.html-code-example {
-    background: transparent;
-    border-radius: 0;
-    overflow: visible;
-    padding: 0;
-    border: none;
-    box-shadow: none;
-    position: relative;
-    margin: 30px 0;
-    width: 100%;
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* Titre du code */
-.html-code-header {
-    background: transparent;
-    color: #2c3e50;
-    padding: 0 0 15px 0;
+.html-section-title {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #e74c3c;
+    gap: 12px;
+    color: var(--html-text);
+    font-size: 1.5em;
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(231, 76, 60, 0.2);
+}
+
+.html-section-title i {
+    color: var(--html-primary);
+    font-size: 1.3em;
+}
+
+.html-section-content {
+    background: var(--html-bg);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: inset 6px 6px 12px var(--html-shadow-dark),
+                inset -6px -6px 12px var(--html-shadow-light);
+    line-height: 1.7;
+    color: var(--html-text);
+    font-size: 1.05em;
+}
+
+/* ===== BLOCS DE CODE ===== */
+.html-code-example {
+    margin-bottom: 25px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 8px 8px 16px var(--html-shadow-dark),
+                -8px -8px 16px var(--html-shadow-light);
+    transition: transform 0.2s ease;
+}
+
+.html-code-example:hover {
+    transform: translateY(-2px);
+}
+
+.html-code-header {
+    background: #2c3e50;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .html-code-header span {
     font-weight: 600;
-    font-size: 1.1rem;
-    color: #e74c3c;
-}
-
-.html-copy-code-btn {
-    background: rgba(231, 76, 60, 0.1);
-    color: #e74c3c;
-    border: 1px solid rgba(231, 76, 60, 0.3);
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
+    letter-spacing: 1px;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.2s ease;
+}
+
+.html-code-header span::before {
+    content: '📁';
+    font-size: 1.1em;
+}
+
+.html-copy-code-btn {
+    margin-left: auto;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 .html-copy-code-btn:hover {
-    background: rgba(231, 76, 60, 0.2);
+    background: var(--html-primary);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
 }
 
-/* Bloc de code - DIRECT SUR LE CONTENEUR */
 .html-code-block {
-    margin: 0;
-    padding: 20px;
-    background: #f8f9fa;
-    color: #2c3e50;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 1rem;
+    background: var(--html-code-bg) !important;
+    margin: 0 !important;
+    padding: 25px !important;
+    border-radius: 0 !important;
+    overflow-x: auto;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 14px;
     line-height: 1.6;
+    color: #d4d4d4;
+    border: 1px solid #2c3e50;
+    border-top: none;
+}
+
+.html-code-block code {
     white-space: pre;
-    overflow: auto;
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    min-height: 300px;
-    max-height: 500px;
-    tab-size: 4;
+    display: block;
 }
 
-/* Scrollbars minimales */
-.html-code-block::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+/* ===== BLOC D'EXPLICATION ===== */
+.html-explanation-block {
+    background: #fef9e7;
+    border-left: 6px solid var(--html-warning);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.05);
 }
 
-.html-code-block::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 5px;
+.html-explanation-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #2c3e50;
+    font-size: 1.3em;
+    margin-bottom: 20px;
 }
 
-.html-code-block::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 5px;
+.html-explanation-title i {
+    color: var(--html-warning);
+    font-size: 1.2em;
 }
 
-/* Coloration syntaxique */
-.html-tag {
-    color: #e74c3c;
-    font-weight: 600;
+.html-explanation-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    line-height: 1.8;
+    font-size: 1.05em;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02);
 }
 
-.html-attr {
-    color: #3498db;
-}
-
-.html-value {
-    color: #2ecc71;
-}
-
-.html-comment {
-    color: #7f8c8d;
-    font-style: italic;
-}
-
-/* ==========================================================================
-   4. RÉSULTAT VISUEL - DIRECT
-   ========================================================================== */
+/* ===== RÉSULTAT VISUEL ===== */
 .html-result-example {
-    background: transparent;
-    border-radius: 0;
-    padding: 0;
-    margin: 30px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 8px 8px 16px var(--html-shadow-dark),
+                -8px -8px 16px var(--html-shadow-light);
+    margin-top: 25px;
 }
 
 .html-result-header {
-    color: #2c3e50;
-    font-size: 1.1rem;
+    background: var(--html-success);
+    color: white;
+    padding: 15px 20px;
     font-weight: 600;
-    margin: 0 0 15px 0;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #3498db;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.html-result-header::before {
+    content: '🎯';
+    font-size: 1.2em;
 }
 
 .html-result-preview {
     background: white;
+    padding: 30px;
+    border: 2px solid var(--html-success);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    min-height: 150px;
+}
+
+/* ===== BLOC "À RETENIR" ===== */
+.html-retention-block {
+    background: #e8f5e9;
+    border-left: 6px solid var(--html-success);
+    border-radius: 16px;
     padding: 25px;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-    min-height: 200px;
-    overflow: auto;
+    margin: 40px 0;
+    box-shadow: 6px 6px 12px rgba(0,0,0,0.05);
 }
 
-/* ==========================================================================
-   5. NAVIGATION - DIRECT
-   ========================================================================== */
-.html-cours-footer {
-    padding: 50px 0 30px;
-    background: transparent;
-    border-top: 1px solid rgba(231, 76, 60, 0.1);
-    margin-top: 50px;
+.html-retention-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #2c3e50;
+    font-size: 1.3em;
+    margin-bottom: 20px;
 }
 
+.html-retention-title i {
+    color: var(--html-success);
+    font-size: 1.2em;
+}
+
+.html-retention-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    line-height: 1.8;
+    font-size: 1.1em;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02);
+}
+
+/* ===== NAVIGATION ENTRE COURS ===== */
 .html-cours-navigation {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 2px solid rgba(163, 177, 198, 0.3);
 }
 
-.html-prev-cours, 
+.html-prev-cours,
 .html-next-cours {
-    background: #e74c3c;
-    color: white;
+    background: var(--html-bg);
     border: none;
-    padding: 15px 30px;
-    border-radius: 8px;
-    cursor: pointer;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 1em;
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 6px 6px 12px var(--html-shadow-dark),
+                -6px -6px 12px var(--html-shadow-light);
+    color: var(--html-text);
+}
+
+.html-prev-cours:hover,
+.html-next-cours:hover {
+    transform: translateY(-2px);
+    box-shadow: 8px 8px 16px var(--html-shadow-dark),
+                -8px -8px 16px var(--html-shadow-light);
+}
+
+.html-next-cours {
+    background: var(--html-primary);
+    color: white;
+    box-shadow: 6px 6px 12px rgba(231, 76, 60, 0.3),
+                -6px -6px 12px rgba(255, 255, 255, 0.5);
+}
+
+.html-next-cours:hover {
+    background: var(--html-primary-dark);
+}
+
+.html-prev-cours:active,
+.html-next-cours:active {
+    transform: translateY(2px);
+    box-shadow: inset 4px 4px 8px var(--html-shadow-dark),
+                inset -4px -4px 8px var(--html-shadow-light);
+}
+
+/* ===== SCROLLBAR PERSONNALISÉE ===== */
+.html-code-block::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.html-code-block::-webkit-scrollbar-track {
+    background: #2c3e50;
+    border-radius: 4px;
+}
+
+.html-code-block::-webkit-scrollbar-thumb {
+    background: #e74c3c;
+    border-radius: 4px;
     transition: all 0.2s ease;
 }
 
-.html-prev-cours:hover, 
-.html-next-cours:hover {
-    background: #c0392b;
+.html-code-block::-webkit-scrollbar-thumb:hover {
+    background: #ff6b5b;
 }
 
-/* ==========================================================================
-   6. CONTENEUR D'EXEMPLES - SIMPLE
-   ========================================================================== */
-.html-example-container {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    width: 100%;
-}
-
-/* ==========================================================================
-   RESPONSIVE
-   ========================================================================== */
-@media (max-width: 768px) {
-    .html-cours-article {
-        padding: 0 15px;
+/* ===== MODE SOMBRE ===== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --html-bg: #1a1a1a;
+        --html-text: #e0e0e0;
+        --html-text-light: #b0b0b0;
+        --html-shadow-dark: #0a0a0a;
+        --html-shadow-light: #2a2a2a;
+        --html-card-bg: #2d2d2d;
     }
     
-    .html-cours-header {
-        padding: 40px 0 20px;
+    .html-section-content,
+    .html-cours-category,
+    .html-cours-difficulty,
+    .html-prev-cours {
+        background: #2d2d2d;
+        color: #e0e0e0;
+    }
+    
+    .html-explanation-content,
+    .html-retention-content {
+        background: #2d2d2d;
+        color: #e0e0e0;
+    }
+    
+    .html-result-preview {
+        background: #2d2d2d;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .html-cours-article {
+        padding: 15px;
+        border-radius: 20px;
     }
     
     .html-cours-title {
-        font-size: 2rem;
-    }
-    
-    .html-cours-section {
-        margin-bottom: 40px;
+        font-size: 1.8em;
     }
     
     .html-section-title {
-        font-size: 1.5rem;
+        font-size: 1.3em;
     }
     
-    .html-code-block {
-        padding: 15px;
-        font-size: 0.95rem;
-        max-height: 400px;
+    .html-code-header {
+        flex-wrap: wrap;
+    }
+    
+    .html-copy-code-btn {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
     }
     
     .html-cours-navigation {
         flex-direction: column;
+        gap: 15px;
     }
     
-    .html-prev-cours, 
+    .html-prev-cours,
     .html-next-cours {
         width: 100%;
         justify-content: center;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
     .html-cours-title {
-        font-size: 1.7rem;
+        font-size: 1.5em;
+    }
+    
+    .html-section-content {
+        padding: 20px;
+    }
+    
+    .html-code-block {
+        padding: 15px !important;
+        font-size: 12px;
     }
     
     .html-cours-meta {
         flex-direction: column;
-        gap: 10px;
-    }
-    
-    .html-section-content li {
-        padding-left: 25px;
-    }
-    
-    .html-code-block {
-        padding: 12px;
-        font-size: 0.9rem;
     }
 }
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+}
+
+.html-copy-code-btn:active {
+    animation: pulse 0.5s;
+}
+
+/* ===== UTILITAIRES ===== */
+.html-text-primary { color: var(--html-primary); }
+.html-bg-primary { background: var(--html-primary); }
+.html-shadow-soft { box-shadow: 4px 4px 8px var(--html-shadow-dark), -4px -4px 8px var(--html-shadow-light); }
+.html-shadow-inset { box-shadow: inset 4px 4px 8px var(--html-shadow-dark), inset -4px -4px 8px var(--html-shadow-light); }
+
+/* ===== FIN style-html.css ===== */
