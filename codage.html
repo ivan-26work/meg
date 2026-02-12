@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG_ULTRA · terrain de jeu</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/codage.css">
+    <link rel="stylesheet" href="css/editor.css">
+    
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    
+    <!-- Icônes UI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- HEADER 15vh -->
+        <header class="main-header">
+            <!-- Bande 1 : navigation + identité -->
+            <div class="header-band-1">
+                <div class="header-left">
+                    <button class="pill-icon" id="menu-toggle" title="Ouvrir/fermer sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    
+                    <div class="dropdown-group">
+                        <button class="pill-icon" id="lang-selector" title="Langage">
+                            <i class="fab fa-html5"></i>
+                        </button>
+                        <div class="dropdown-vertical" id="lang-dropdown">
+                            <button data-lang="html">HTML</button>
+                            <button data-lang="css">CSS</button>
+                            <button data-lang="js">JS</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-center">
+                    <span class="site-title">MG_ULTRA</span>
+                </div>
+
+                <div class="header-right">
+                    <div class="dropdown-group">
+                        <button class="pill-icon" id="accessibility-btn" title="Accessibilité">
+                            <i class="fas fa-universal-access"></i>
+                        </button>
+                        <div class="dropdown-vertical" id="accessibility-dropdown">
+                            <button id="font-plus">Taille +</button>
+                            <button id="font-minus">Taille -</button>
+                            <button id="contrast-toggle">Contraste</button>
+                            <button id="darkmode-toggle">Mode nuit</button>
+                        </div>
+                    </div>
+
+                    <button class="pill-icon" id="console-toggle" title="Console">
+                        <i class="fas fa-terminal"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Bande 2 : snippets scrollables -->
+            <div class="header-band-2" id="snippet-bar"></div>
+        </header>
+
+        <!-- LAYOUT PRINCIPAL : sidebar + éditeur -->
+        <div class="main-layout">
+            <!-- SIDEBAR coulissante -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Projets</h3>
+                </div>
+                <div class="sidebar-content" id="project-list"></div>
+            </aside>
+
+            <!-- ÉDITEUR -->
+            <div class="editor-panel" id="editorPanel">
+                <!-- Header éditeur : fixe, scrollable horizontal -->
+                <div class="editor-header scrollable-x">
+                    <button class="pill-icon tab-btn active" data-editor="html">
+                        <i class="fab fa-html5"></i>
+                    </button>
+                    <button class="pill-icon tab-btn" data-editor="css">
+                        <i class="fab fa-css3-alt"></i>
+                    </button>
+                    <button class="pill-icon tab-btn" data-editor="js">
+                        <i class="fab fa-js"></i>
+                    </button>
+                    <button class="pill-icon" id="undo-btn" title="Annuler">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button class="pill-icon" id="redo-btn" title="Rétablir">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button class="pill-icon" id="reset-btn" title="Réinitialiser">
+                        <i class="fas fa-rotate-left"></i>
+                    </button>
+                    <button class="pill-icon" id="save-editor-btn" title="Sauvegarder">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button class="pill-icon run-btn" id="run-btn" title="Exécuter">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+                
+                <!-- Zone d'édition : scrollable H + V -->
+                <div class="editor-container" id="editorContainer">
+                    <div id="html-editor" class="cm-wrapper"></div>
+                    <div id="css-editor" class="cm-wrapper hidden"></div>
+                    <div id="js-editor" class="cm-wrapper hidden"></div>
+                </div>
+
+                <!-- CONSOLE : prend tout l'espace quand active -->
+                <div class="console-panel hidden" id="consolePanel">
+                    <div class="console-header">
+                        <span><i class="fas fa-terminal"></i></span>
+                        <button class="pill-icon small" id="close-console">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="console-content" id="consoleContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    
+    <!-- Modules -->
+    <script src="js/api-ultra.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/side-barre.js"></script>
+    <script src="js/editor.js"></script>
+    <script src="js/console.js"></script>
+</body>
+</html>
