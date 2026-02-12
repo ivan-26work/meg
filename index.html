@@ -26,12 +26,11 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="user-profile" id="user-profile">
-                <!-- Contenu injecté dynamiquement selon connexion -->
                 <div class="profile-default">
                     <div class="profile-circle">
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-code"></i>
                     </div>
-                    <span class="profile-name">Connectez-vous</span>
+                    <span class="profile-name">MG_ULTRA</span>
                 </div>
             </div>
             <button class="sidebar-close" id="sidebar-close">
@@ -79,15 +78,6 @@
                 </a>
             </div>
             
-            <!-- Groupe 3 : Connexion/Auth -->
-            <div class="sidebar-group" id="auth-group">
-                <h3 class="sidebar-group-title">Compte</h3>
-                <a href="auth.html" class="sidebar-btn auth-btn" id="auth-btn">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span>Connexion / Inscription</span>
-                </a>
-            </div>
-            
             <!-- Footer Sidebar -->
             <div class="sidebar-footer">
                 <div class="powered-by">
@@ -110,15 +100,9 @@
                 <i class="fas fa-bars"></i>
             </button>
             
-            <!-- Barre de recherche centre (petite) -->
-            <div class="header-search">
-                <div class="search-bar">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Rechercher..." id="home-search">
-                    <button class="clear-btn hidden">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+            <!-- Nom du site centré -->
+            <div class="header-site-title">
+                <span>MG_ULTRA</span>
             </div>
             
             <!-- Logo droite -->
@@ -141,15 +125,15 @@
                         <span>HTML</span>
                     </button>
                     
-                    <button class="tab-btn pill-btn" data-tab="jeux">
+                    <a href="jeux.html" class="tab-btn pill-btn" data-tab="jeux">
                         <i class="fas fa-gamepad"></i>
                         <span>Jeux</span>
-                    </button>
+                    </a>
                     
-                    <button class="tab-btn pill-btn" data-tab="codage">
+                    <a href="codage.html" class="tab-btn pill-btn" data-tab="codage">
                         <i class="fas fa-code"></i>
                         <span>Codage</span>
-                    </button>
+                    </a>
                     
                     <button class="tab-btn pill-btn" data-tab="moi">
                         <i class="fas fa-user"></i>
@@ -166,7 +150,6 @@
             
             <!-- Section documentation développement web -->
             <section class="doc-section" id="main-doc">
-                
                 
                 <div class="doc-content">
                     <!-- Contenu CSS -->
@@ -187,28 +170,6 @@
                             <div class="loading-content">
                                 <div class="loading-spinner"></div>
                                 <p>Chargement du contenu HTML...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Contenu Jeux -->
-                    <div class="tab-content" id="jeux-content">
-                        <div class="tab-content-inner" id="jeux-content-inner">
-                            <!-- Contenu injecté par jeux.js -->
-                            <div class="loading-content">
-                                <div class="loading-spinner"></div>
-                                <p>Chargement des jeux interactifs...</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Contenu Codage -->
-                    <div class="tab-content" id="codage-content">
-                        <div class="tab-content-inner" id="codage-content-inner">
-                            <!-- Contenu injecté par codage.js -->
-                            <div class="loading-content">
-                                <div class="loading-spinner"></div>
-                                <p>Chargement de l'environnement de codage...</p>
                             </div>
                         </div>
                     </div>
@@ -254,15 +215,10 @@
     <script src="./js/global.js"></script>
     <script src="./js/index.js"></script>
     
-    <!-- Scripts des onglets (chargés dynamiquement) -->
+    <!-- Scripts des onglets dynamiques (CSS, HTML, Moi) -->
     <script src="./js/css.js" defer></script>
     <script src="./js/html.js" defer></script>
-    <script src="./js/jeux.js" defer></script>
-    <script src="./js/codage.js" defer></script>
     <script src="./js/moi.js" defer></script>
-    
-    <!-- Firebase (pour authentification) -->
-    <script type="module" src="./js/auth/firebase-config.js"></script>
     
 </body>
 </html>
