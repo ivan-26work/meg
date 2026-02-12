@@ -79,40 +79,59 @@ function showError(message) {
     ">❌ ${message}</div>`;
 }
 
+// js/preview.js - Correction ZIP
+
 async function downloadZip() {
     const data = localStorage.getItem('preview_data');
-    if (!data) return;
-    
-    const { html, css, js } = JSON.parse(data);
-    const title = extractTitle(html) || 'projet';
+    if (!data) {
+        alert('❌ Aucun projet à télécharger');
+        return;
+    }
     
     try {
-        // Utilisation de JSZip via CDN
-        const JSZip = window.JSZip;
-        if (!JSZip) {
-            // Charge JSZip dynamiquement
+        const { html, css, js } = JSON.parse(data);
+        const title = extractTitle(html) || 'projet';
+        const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'projet';
+        
+        // Charge JSZip depuis CDN
+        if (!window.JSZip) {
             await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
         }
         
         const zip = new JSZip();
         
-        // Ajoute les fichiers
-        zip.file('index.html', html);
-        zip.file('style.css', css);
-        zip.file('script.js', js);
+        // Nettoie les chemins dans le HTML
+        const cleanHtml = html
+            .replace(/<link rel="stylesheet" href="style\.css">/, '<link rel="stylesheet" href="style.css">')
+            .replace(/<script src="script\.js"><\/script>/, '<script src="script.js"><\/script>');
         
-        // Génère et télécharge
-        const content = await zip.generateAsync({ type: 'blob' });
+        zip.file('index.html', cleanHtml);
+        zip.file('style.css', css || '/* vide */');
+        zip.file('script.js', js || '// vide');
+        
+        const content = await zip.generateAsync({ 
+            type: 'blob',
+            compression: 'DEFLATE',
+            compressionOptions: { level: 6 }
+        });
+        
         const url = URL.createObjectURL(content);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${title.replace(/\.html$/, '') || 'projet'}.zip`;
+        a.download = `${safeTitle}.zip`;
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        
+        // Feedback
+        const btn = document.getElementById('download-btn');
+        btn.style.color = '#4c9a8c';
+        setTimeout(() => btn.style.color = '', 500);
         
     } catch (e) {
         console.error('Erreur ZIP:', e);
-        alert('❌ Erreur lors de la création du ZIP');
+        alert('❌ Erreur lors de la création du ZIP: ' + e.message);
     }
 }
 
