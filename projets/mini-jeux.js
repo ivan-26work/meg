@@ -22,7 +22,15 @@ window.project = {
         <canvas id="gameCanvas" width="400" height="600"></canvas>
         
         <div class="game-controls">
-            <p>Utilise les flèches ← ↑ → pour te déplacer</p>
+            <p class="desktop-hint">← Glisser gauche | → Glisser droit | ↓ Sauter</p>
+            
+            <!-- Contrôles tactiles -->
+            <div class="touch-controls">
+                <button class="touch-btn" id="moveLeft" aria-label="Glisser à gauche">←</button>
+                <button class="touch-btn" id="jumpBtn" aria-label="Sauter">⬇️</button>
+                <button class="touch-btn" id="moveRight" aria-label="Glisser à droite">→</button>
+            </div>
+            
             <button id="restartBtn" class="restart-btn">Nouvelle partie</button>
         </div>
         
@@ -59,6 +67,8 @@ body {
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    max-width: 500px;
+    width: 100%;
 }
 
 .game-header {
@@ -85,7 +95,9 @@ body {
     background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 100%);
     border-radius: 10px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    cursor: none;
+    width: 100%;
+    height: auto;
+    touch-action: none; /* Empêche le défilement tactile */
 }
 
 .game-controls {
@@ -94,10 +106,50 @@ body {
     color: white;
 }
 
-.game-controls p {
-    margin-bottom: 10px;
+.desktop-hint {
+    margin-bottom: 15px;
     font-size: 14px;
     opacity: 0.8;
+}
+
+/* Contrôles tactiles */
+.touch-controls {
+    display: none; /* Caché par défaut sur desktop */
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.touch-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transition: all 0.1s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    touch-action: manipulation; /* Optimise pour le tactile */
+}
+
+.touch-btn:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Afficher les contrôles tactiles seulement sur mobile/tablette */
+@media (max-width: 768px) {
+    .touch-controls {
+        display: flex;
+    }
+    
+    .desktop-hint {
+        display: none;
+    }
 }
 
 .restart-btn {
@@ -110,6 +162,8 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-top: 10px;
+    touch-action: manipulation;
 }
 
 .restart-btn:hover {
@@ -154,6 +208,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
+    touch-action: manipulation;
 }
 
 .game-over button:hover {
@@ -163,16 +218,6 @@ body {
 
 .hidden {
     display: none;
-}
-
-/* Animation pour les obstacles */
-@keyframes obstacleMove {
-    from {
-        transform: translateY(0);
-    }
-    to {
-        transform: translateY(5px);
-    }
 }
 `,
     
@@ -191,11 +236,17 @@ const LANE_COUNT = 3;
 const LANE_WIDTH = canvas.width / LANE_COUNT;
 const PLAYER_SIZE = 30;
 const OBSTACLE_SIZE = 30;
-const PLAYER_Y = canvas.height - 80;
+const GROUND_Y = canvas.height - 80; // Position au sol
+const JUMP_HEIGHT = 120; // Hauteur du saut
 
 // Variables du jeu
 let playerX = canvas.width / 2 - PLAYER_SIZE / 2;
 let playerLane = 1; // 0: gauche, 1: milieu, 2: droite
+let playerY = GROUND_Y;
+let isJumping = false;
+let jumpVelocity = 0;
+const GRAVITY = 0.8;
+
 let obstacles = [];
 let score = 0;
 let highScore = localStorage.getItem('runnerHighScore') || 0;
@@ -265,33 +316,41 @@ function drawPlayer() {
     ctx.shadowColor = '#2E7D32';
     ctx.shadowBlur = 15;
     ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2, PLAYER_Y + PLAYER_SIZE/2, PLAYER_SIZE/2, 0, Math.PI * 2);
+    ctx.arc(playerX + PLAYER_SIZE/2, playerY + PLAYER_SIZE/2, PLAYER_SIZE/2, 0, Math.PI * 2);
     ctx.fill();
     
     // Yeux
     ctx.fillStyle = '#FFFFFF';
     ctx.shadowBlur = 0;
     ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 - 5, PLAYER_Y + PLAYER_SIZE/2 - 5, 5, 0, Math.PI * 2);
+    ctx.arc(playerX + PLAYER_SIZE/2 - 5, playerY + PLAYER_SIZE/2 - 5, 5, 0, Math.PI * 2);
     ctx.fill();
     
     ctx.fillStyle = '#000000';
     ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 - 7, PLAYER_Y + PLAYER_SIZE/2 - 7, 2, 0, Math.PI * 2);
+    ctx.arc(playerX + PLAYER_SIZE/2 - 7, playerY + PLAYER_SIZE/2 - 7, 2, 0, Math.PI * 2);
     ctx.fill();
     
     ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 + 5, PLAYER_Y + PLAYER_SIZE/2 - 5, 5, 0, Math.PI * 2);
+    ctx.arc(playerX + PLAYER_SIZE/2 + 5, playerY + PLAYER_SIZE/2 - 5, 5, 0, Math.PI * 2);
     ctx.fill();
     
     ctx.fillStyle = '#000000';
     ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 + 3, PLAYER_Y + PLAYER_SIZE/2 - 7, 2, 0, Math.PI * 2);
+    ctx.arc(playerX + PLAYER_SIZE/2 + 3, playerY + PLAYER_SIZE/2 - 7, 2, 0, Math.PI * 2);
     ctx.fill();
     
-    // Casquette
+    // Casquette (tourne pendant le saut)
     ctx.fillStyle = '#FF5722';
-    ctx.fillRect(playerX + 5, PLAYER_Y - 5, 20, 8);
+    if (isJumping) {
+        ctx.save();
+        ctx.translate(playerX + PLAYER_SIZE/2, playerY);
+        ctx.rotate(jumpVelocity * 0.1);
+        ctx.fillRect(-PLAYER_SIZE/2 + 5, -5, 20, 8);
+        ctx.restore();
+    } else {
+        ctx.fillRect(playerX + 5, playerY - 5, 20, 8);
+    }
 }
 
 // Dessiner les voies
@@ -310,12 +369,30 @@ function drawLanes() {
     ctx.setLineDash([]);
 }
 
+// Gérer le saut
+function handleJump() {
+    if (isJumping) {
+        playerY += jumpVelocity;
+        jumpVelocity += GRAVITY;
+        
+        // Atterrissage
+        if (playerY >= GROUND_Y) {
+            playerY = GROUND_Y;
+            isJumping = false;
+            jumpVelocity = 0;
+        }
+    }
+}
+
 // Mettre à jour le jeu
 function update() {
     if (!gameRunning) return;
     
+    // Gérer le saut
+    handleJump();
+    
     // Générer des obstacles
-    if (frameCount % 60 === 0) { // Toutes les ~1 secondes à 60fps
+    if (frameCount % 60 === 0) {
         const lane = Math.floor(Math.random() * LANE_COUNT);
         obstacles.push(new Obstacle(lane));
     }
@@ -324,10 +401,10 @@ function update() {
     for (let i = obstacles.length - 1; i >= 0; i--) {
         obstacles[i].update();
         
-        // Vérifier la collision
-        if (obstacles[i].lane === playerLane) {
-            if (obstacles[i].y + obstacles[i].height > PLAYER_Y && 
-                obstacles[i].y < PLAYER_Y + PLAYER_SIZE) {
+        // Vérifier la collision (seulement si on est au sol)
+        if (!isJumping && obstacles[i].lane === playerLane) {
+            if (obstacles[i].y + obstacles[i].height > playerY && 
+                obstacles[i].y < playerY + PLAYER_SIZE) {
                 gameOver();
                 return;
             }
@@ -336,7 +413,6 @@ function update() {
         // Supprimer les obstacles sortis
         if (obstacles[i].y > canvas.height) {
             obstacles.splice(i, 1);
-            // Augmenter le score
             score += 10;
             scoreElement.textContent = score;
             
@@ -352,16 +428,9 @@ function update() {
 
 // Dessiner le jeu
 function draw() {
-    // Effacer le canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Dessiner les voies
     drawLanes();
-    
-    // Dessiner les obstacles
     obstacles.forEach(obstacle => obstacle.draw());
-    
-    // Dessiner le joueur
     drawPlayer();
 }
 
@@ -380,6 +449,9 @@ function startGame() {
     gameSpeed = 3;
     frameCount = 0;
     playerLane = 1;
+    playerY = GROUND_Y;
+    isJumping = false;
+    jumpVelocity = 0;
     playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
     scoreElement.textContent = score;
     gameOverDiv.classList.add('hidden');
@@ -391,7 +463,6 @@ function gameOver() {
     gameRunning = false;
     cancelAnimationFrame(animationId);
     
-    // Mettre à jour le record
     if (score > highScore) {
         highScore = score;
         localStorage.setItem('runnerHighScore', highScore);
@@ -402,7 +473,31 @@ function gameOver() {
     gameOverDiv.classList.remove('hidden');
 }
 
-// Redémarrer le jeu
+// Fonctions de contrôle
+function moveLeft() {
+    if (!gameRunning) return;
+    if (playerLane > 0) {
+        playerLane--;
+        playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
+    }
+}
+
+function moveRight() {
+    if (!gameRunning) return;
+    if (playerLane < LANE_COUNT - 1) {
+        playerLane++;
+        playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
+    }
+}
+
+function jump() {
+    if (!gameRunning) return;
+    if (!isJumping) {
+        isJumping = true;
+        jumpVelocity = -12; // Vitesse initiale vers le haut
+    }
+}
+
 function restartGame() {
     startGame();
 }
@@ -414,26 +509,26 @@ document.addEventListener('keydown', (e) => {
     switch(e.key) {
         case 'ArrowLeft':
             e.preventDefault();
-            if (playerLane > 0) {
-                playerLane--;
-                playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
-            }
+            moveLeft();
             break;
         case 'ArrowRight':
             e.preventDefault();
-            if (playerLane < LANE_COUNT - 1) {
-                playerLane++;
-                playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
-            }
+            moveRight();
+            break;
+        case 'ArrowDown':
+            e.preventDefault();
+            jump();
             break;
     }
 });
 
+// Contrôles tactiles
+document.getElementById('moveLeft').addEventListener('click', moveLeft);
+document.getElementById('moveRight').addEventListener('click', moveRight);
+document.getElementById('jumpBtn').addEventListener('click', jump);
+
 // Bouton restart
 document.getElementById('restartBtn').addEventListener('click', restartGame);
-
-// Démarrer automatiquement
-startGame();
 
 // Empêcher le défilement de la page avec les flèches
 window.addEventListener('keydown', (e) => {
@@ -441,5 +536,46 @@ window.addEventListener('keydown', (e) => {
         e.preventDefault();
     }
 });
+
+// Swipe tactile sur le canvas (pour ceux qui préfèrent swiper)
+let touchStartX = 0;
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    touchStartX = e.touches[0].clientX;
+});
+
+canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    if (!gameRunning) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffX = touchEndX - touchStartX;
+    
+    // Détection du swipe horizontal
+    if (Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+            moveRight(); // Swipe droite
+        } else {
+            moveLeft(); // Swipe gauche
+        }
+    }
+});
+
+// Double tap pour sauter
+let lastTap = 0;
+canvas.addEventListener('touchend', (e) => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    
+    if (tapLength < 300 && tapLength > 0) {
+        e.preventDefault();
+        jump(); // Double tap = saut
+    }
+    
+    lastTap = currentTime;
+});
+
+// Démarrer automatiquement
+startGame();
 `
 };
