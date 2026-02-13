@@ -601,3 +601,43 @@ body.dark-mode .dropdown-vertical {
     height: 100% !important;
     width: 100% !important;
 }
+/* Dans codage.css - Rendre le titre lumineux */
+
+.site-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: #4a4e69;
+    text-transform: uppercase;
+    background: #e0e5ec;
+    padding: 6px 16px;
+    border-radius: 30px;
+    box-shadow: inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff;
+    
+    /* Effet lumineux */
+    text-shadow: 0 0 5px rgba(76, 154, 140, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.site-title:hover {
+    text-shadow: 0 0 15px rgba(76, 154, 140, 0.8), 0 0 30px rgba(76, 154, 140, 0.5);
+    color: #4c9a8c;
+    transform: scale(1.02);
+}
+
+.site-title:active {
+    transform: scale(0.98);
+}
+
+body.dark-mode .site-title {
+    color: #e0e5ec;
+    background: #2d2f33;
+    box-shadow: inset 3px 3px 6px #1a1b1e, inset -3px -3px 6px #3a3c42;
+    text-shadow: 0 0 8px rgba(76, 154, 140, 0.5);
+}
+
+body.dark-mode .site-title:hover {
+    text-shadow: 0 0 20px rgba(76, 154, 140, 1), 0 0 40px rgba(76, 154, 140, 0.8);
+}
