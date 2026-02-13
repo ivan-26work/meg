@@ -40,7 +40,13 @@ function initHeader() {
         });
     });
 }
-
+// Redirection vers index.html
+const siteTitle = document.querySelector('.site-title');
+if (siteTitle) {
+    siteTitle.addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
+}
 // 35+ snippets par langage
 const snippets = {
     html: [
