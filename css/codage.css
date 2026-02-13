@@ -497,3 +497,36 @@ body.dark-mode .sidebar-content::-webkit-scrollbar-thumb {
     position: sticky;
     top: calc(15vh + 24px);
 }
+/* À AJOUTER dans codage.css - DROPDOWN AU-DESSUS DE TOUT */
+
+.dropdown-vertical {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    background: #e0e5ec;
+    border-radius: 20px;
+    padding: 8px;
+    box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 99999 !important; /* Force au-dessus de tout */
+    min-width: 180px;
+}
+
+/* Positionnement spécifique pour dropdown droite */
+.header-right .dropdown-vertical {
+    left: auto;
+    right: 0;
+}
+
+/* Afficher quand actif */
+.dropdown-group.active .dropdown-vertical {
+    display: flex !important;
+}
+
+/* Mode nuit */
+body.dark-mode .dropdown-vertical {
+    background: #2d2f33;
+    box-shadow: 9px 9px 16px #1a1b1e, -9px -9px 16px #3a3c42;
+}
