@@ -1,4 +1,4 @@
-// js/header.js - MISE À JOUR COMPLÈTE
+// js/header.js - Version ACE avec injection position curseur
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
@@ -19,7 +19,7 @@ function initHeader() {
         });
     }
     
-    // Sélecteur langage - met à jour les snippets et l'icône
+    // Sélecteur langage
     const langButtons = document.querySelectorAll('#lang-dropdown button');
     const langSelector = document.getElementById('lang-selector');
     
@@ -29,7 +29,6 @@ function initHeader() {
             const lang = e.target.dataset.lang;
             updateSnippets(lang);
             
-            // Change icône sélecteur
             if (langSelector) {
                 const icon = langSelector.querySelector('i');
                 if (lang === 'html') icon.className = 'fab fa-html5';
@@ -37,13 +36,12 @@ function initHeader() {
                 if (lang === 'js') icon.className = 'fab fa-js';
             }
             
-            // Ferme dropdown
             document.getElementById('lang-dropdown')?.parentElement.classList.remove('active');
         });
     });
 }
 
-// 35 snippets par langage - VERSION COMPLÈTE
+// 35+ snippets par langage
 const snippets = {
     html: [
         '!', 'p', 'div', 'span', 'a', 'img', 'ul', 'li', 'h1', 'h2', 'h3',
@@ -74,60 +72,44 @@ const snippets = {
     ]
 };
 
-// Map des snippets vers leur vraie structure
 const snippetTemplates = {
-    // HTML - Structure de base
     '!': '<!DOCTYPE html>\n<html lang="fr">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Document</title>\n</head>\n<body>\n    \n</body>\n</html>',
-    
-    // HTML - Balises de base
-    p: '<p>...</p>',
-    div: '<div>...</div>',
-    span: '<span>...</span>',
-    a: '<a href="#">...</a>',
+    p: '<p></p>',
+    div: '<div></div>',
+    span: '<span></span>',
+    a: '<a href="#"></a>',
     img: '<img src="" alt="">',
-    ul: '<ul>\n    <li>...</li>\n</ul>',
-    li: '<li>...</li>',
-    h1: '<h1>...</h1>',
-    h2: '<h2>...</h2>',
-    h3: '<h3>...</h3>',
-    
-    // HTML - Boutons avec événements
-    button: '<button type="button">...</button>',
+    ul: '<ul>\n    <li></li>\n</ul>',
+    li: '<li></li>',
+    h1: '<h1></h1>',
+    h2: '<h2></h2>',
+    h3: '<h3></h3>',
+    button: '<button></button>',
     'btn-click': '<button onclick="maFonction()">Cliquer</button>',
     'btn-event': '<button id="btn">Cliquer</button>',
     'btn-submit': '<button type="submit">Envoyer</button>',
     'btn-reset': '<button type="reset">Réinitialiser</button>',
-    
-    // HTML - Formulaires et champs
     input: '<input type="text" placeholder="">',
     form: '<form action="" method="post">\n    \n</form>',
     select: '<select name="" id="">\n    <option value="">Option 1</option>\n    <option value="">Option 2</option>\n</select>',
     textarea: '<textarea name="" id="" cols="30" rows="10"></textarea>',
-    label: '<label for="">...</label>',
-    table: '<table>\n    <tr>\n        <td>...</td>\n    </tr>\n</table>',
+    label: '<label for=""></label>',
+    table: '<table>\n    <tr>\n        <td></td>\n    </tr>\n</table>',
     br: '<br>',
     hr: '<hr>',
-    
-    // HTML - Métadonnées et ressources
     meta: '<meta charset="UTF-8">',
     link: '<link rel="stylesheet" href="style.css">',
     script: '<script src="script.js"><\/script>',
     style: '<style>\n    \n</style>',
     head: '<head>\n    \n</head>',
     body: '<body>\n    \n</body>',
-    
-    // HTML - Attributs
     class: 'class=""',
     id: 'id=""',
     src: 'src=""',
     href: 'href=""',
-    
-    // HTML - Médias
     video: '<video src="" controls></video>',
     audio: '<audio src="" controls></audio>',
     iframe: '<iframe src="" frameborder="0"></iframe>',
-    
-    // HTML - Structure
     nav: '<nav>\n    \n</nav>',
     header: '<header>\n    \n</header>',
     footer: '<footer>\n    \n</footer>',
@@ -135,8 +117,6 @@ const snippetTemplates = {
     section: '<section>\n    \n</section>',
     article: '<article>\n    \n</article>',
     aside: '<aside>\n    \n</aside>',
-    
-    // CSS - Propriétés de base
     color: 'color: ;',
     background: 'background: ;',
     margin: 'margin: ;',
@@ -159,8 +139,6 @@ const snippetTemplates = {
     transition: 'transition: ;',
     transform: 'transform: ;',
     animation: 'animation: ;',
-    
-    // CSS - Avancé
     '@media': '@media screen and (max-width: 768px) {\n    \n}',
     '@import': '@import url("");',
     '@keyframes': '@keyframes animationName {\n    0% { }\n    100% { }\n}',
@@ -176,8 +154,6 @@ const snippetTemplates = {
     'mix-blend-mode': 'mix-blend-mode: ;',
     'object-fit': 'object-fit: ;',
     'scroll-behavior': 'scroll-behavior: smooth;',
-    
-    // JS - Bases
     function: 'function nom() {\n    \n}',
     const: 'const nom = ;',
     let: 'let nom = ;',
@@ -190,38 +166,24 @@ const snippetTemplates = {
     'console.log': 'console.log();',
     'document.querySelector': 'document.querySelector("");',
     addEventListener: 'element.addEventListener("click", () => {\n    \n});',
-    
-    // JS - Temporisation
     setTimeout: 'setTimeout(() => {\n    \n}, 1000);',
     setInterval: 'setInterval(() => {\n    \n}, 1000);',
-    
-    // JS - Promesses et async
     Promise: 'new Promise((resolve, reject) => {\n    \n});',
     async: 'async function nom() {\n    \n}',
     await: 'await ;',
     fetch: 'fetch("url")\n    .then(response => response.json())\n    .then(data => console.log(data))\n    .catch(error => console.error(error));',
-    
-    // JS - Gestion d'erreurs
     try: 'try {\n    \n} catch (error) {\n    \n}',
     catch: 'catch (error) {\n    \n}',
     throw: 'throw new Error();',
-    
-    // JS - Classes et objets
     new: 'new ;',
     class: 'class Nom {\n    constructor() {\n        \n    }\n    \n    methode() {\n        \n    }\n}',
-    
-    // JS - Stockage
     localStorage: 'localStorage.setItem("key", value);\nconst value = localStorage.getItem("key");',
     sessionStorage: 'sessionStorage.setItem("key", value);\nconst value = sessionStorage.getItem("key");',
     'JSON.stringify': 'JSON.stringify(obj)',
     'JSON.parse': 'JSON.parse(jsonString)',
-    
-    // JS - Math et Date
     'Math.random': 'Math.random()',
     Date: 'new Date()',
     RegExp: 'new RegExp("pattern", "i")',
-    
-    // JS - Méthodes tableau
     'Array.map': 'array.map(item => {\n    \n});',
     filter: 'array.filter(item => {\n    return condition;\n});',
     reduce: 'array.reduce((acc, curr) => {\n    return acc + curr;\n}, initialValue);',
@@ -229,12 +191,8 @@ const snippetTemplates = {
     some: 'array.some(item => item === valeur);',
     every: 'array.every(item => item === valeur);',
     includes: 'array.includes(valeur);',
-    
-    // JS - Méthodes string
     split: 'string.split("");',
     join: 'array.join("");',
-    
-    // JS - ES6+
     'template literal': '`${variable}`',
     destructuring: 'const { propriete } = objet;\nconst [ premier ] = tableau;',
     spread: '[...array]',
@@ -277,31 +235,8 @@ function insertSnippet(e) {
     if (lang === 'js') editor = window.editors?.js;
     
     if (editor) {
-        const cursor = editor.getCursor();
-        editor.replaceRange(codeToInsert, cursor);
-        
-        const placeholders = ['...', 'nom', 'condition', 'valeur', 'url', 'key', 'value', 'obj', 'array', 'string'];
-        let searchPos = '';
-        
-        for (const ph of placeholders) {
-            if (codeToInsert.includes(ph)) {
-                searchPos = ph;
-                break;
-            }
-        }
-        
-        if (searchPos) {
-            const from = {
-                line: cursor.line,
-                ch: cursor.ch + codeToInsert.indexOf(searchPos)
-            };
-            const to = {
-                line: cursor.line,
-                ch: cursor.ch + codeToInsert.indexOf(searchPos) + searchPos.length
-            };
-            editor.setSelection(from, to);
-        }
-        
+        const cursor = editor.getCursorPosition();
+        editor.session.insert(cursor, codeToInsert);
         editor.focus();
     }
 }
@@ -352,97 +287,29 @@ function initColorPicker() {
     
     colorDropdown.innerHTML = '';
     
-    // 1. SLIDER TEINTE
-    const hueContainer = document.createElement('div');
-    hueContainer.style.padding = '8px';
-    hueContainer.style.marginBottom = '8px';
+    // Interface du sélecteur couleur (version simplifiée)
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.value = '#4c9a8c';
+    colorInput.style.width = '100%';
+    colorInput.style.height = '50px';
+    colorInput.style.border = 'none';
+    colorInput.style.borderRadius = '10px';
+    colorInput.style.marginBottom = '10px';
+    colorInput.style.cursor = 'pointer';
     
-    const hueLabel = document.createElement('div');
-    hueLabel.style.display = 'flex';
-    hueLabel.style.justifyContent = 'space-between';
-    hueLabel.style.marginBottom = '4px';
-    hueLabel.style.fontSize = '12px';
-    hueLabel.style.color = '#4a4e69';
-    hueLabel.innerHTML = '<span>Teinte</span><span id="hue-value">0°</span>';
+    const hexInput = document.createElement('input');
+    hexInput.type = 'text';
+    hexInput.value = '#4c9a8c';
+    hexInput.placeholder = '#000000';
+    hexInput.style.width = '100%';
+    hexInput.style.padding = '10px';
+    hexInput.style.borderRadius = '10px';
+    hexInput.style.border = 'none';
+    hexInput.style.background = '#e0e5ec';
+    hexInput.style.marginBottom = '10px';
+    hexInput.style.boxShadow = 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff';
     
-    const hueSlider = document.createElement('input');
-    hueSlider.type = 'range';
-    hueSlider.min = '0';
-    hueSlider.max = '360';
-    hueSlider.value = '180';
-    hueSlider.style.width = '100%';
-    hueSlider.style.accentColor = '#4c9a8c';
-    
-    // 2. SLIDER SATURATION
-    const satContainer = document.createElement('div');
-    satContainer.style.padding = '8px';
-    satContainer.style.marginBottom = '8px';
-    
-    const satLabel = document.createElement('div');
-    satLabel.style.display = 'flex';
-    satLabel.style.justifyContent = 'space-between';
-    satLabel.style.marginBottom = '4px';
-    satLabel.style.fontSize = '12px';
-    satLabel.style.color = '#4a4e69';
-    satLabel.innerHTML = '<span>Saturation</span><span id="sat-value">100%</span>';
-    
-    const satSlider = document.createElement('input');
-    satSlider.type = 'range';
-    satSlider.min = '0';
-    satSlider.max = '100';
-    satSlider.value = '100';
-    satSlider.style.width = '100%';
-    satSlider.style.accentColor = '#4c9a8c';
-    
-    // 3. SLIDER LUMINOSITÉ
-    const lightContainer = document.createElement('div');
-    lightContainer.style.padding = '8px';
-    lightContainer.style.marginBottom = '8px';
-    
-    const lightLabel = document.createElement('div');
-    lightLabel.style.display = 'flex';
-    lightLabel.style.justifyContent = 'space-between';
-    lightLabel.style.marginBottom = '4px';
-    lightLabel.style.fontSize = '12px';
-    lightLabel.style.color = '#4a4e69';
-    lightLabel.innerHTML = '<span>Luminosité</span><span id="light-value">50%</span>';
-    
-    const lightSlider = document.createElement('input');
-    lightSlider.type = 'range';
-    lightSlider.min = '0';
-    lightSlider.max = '100';
-    lightSlider.value = '50';
-    lightSlider.style.width = '100%';
-    lightSlider.style.accentColor = '#4c9a8c';
-    
-    // 4. APERÇU COULEUR
-    const previewContainer = document.createElement('div');
-    previewContainer.style.display = 'flex';
-    previewContainer.style.alignItems = 'center';
-    previewContainer.style.gap = '8px';
-    previewContainer.style.padding = '8px';
-    previewContainer.style.marginBottom = '8px';
-    previewContainer.style.background = '#e0e5ec';
-    previewContainer.style.borderRadius = '30px';
-    
-    const previewColor = document.createElement('div');
-    previewColor.style.width = '30px';
-    previewColor.style.height = '30px';
-    previewColor.style.borderRadius = '50%';
-    previewColor.style.boxShadow = 'inset 2px 2px 5px #a3b1c6, inset -2px -2px 5px #ffffff';
-    previewColor.style.background = '#4c9a8c';
-    
-    const previewText = document.createElement('span');
-    previewText.style.fontSize = '11px';
-    previewText.style.fontWeight = '600';
-    previewText.style.color = '#4a4e69';
-    previewText.style.fontFamily = 'monospace';
-    previewText.textContent = '#4c9a8c';
-    
-    previewContainer.appendChild(previewColor);
-    previewContainer.appendChild(previewText);
-    
-    // 5. BOUTON INSÉRER
     const insertBtn = document.createElement('button');
     insertBtn.textContent = 'Insérer la couleur';
     insertBtn.style.width = '100%';
@@ -451,166 +318,32 @@ function initColorPicker() {
     insertBtn.style.border = 'none';
     insertBtn.style.background = '#4c9a8c';
     insertBtn.style.color = 'white';
-    insertBtn.style.fontWeight = '600';
+    insertBtn.style.fontWeight = 'bold';
     insertBtn.style.cursor = 'pointer';
-    insertBtn.style.marginBottom = '8px';
-    insertBtn.style.boxShadow = '5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff';
+    insertBtn.style.marginBottom = '10px';
     
-    // 6. INPUT HEX MANUEL
-    const hexContainer = document.createElement('div');
-    hexContainer.style.display = 'flex';
-    hexContainer.style.gap = '4px';
-    hexContainer.style.padding = '8px';
-    
-    const hexInput = document.createElement('input');
-    hexInput.type = 'text';
-    hexInput.placeholder = '#000000';
-    hexInput.value = '#4c9a8c';
-    hexInput.style.flex = '1';
-    hexInput.style.padding = '8px';
-    hexInput.style.borderRadius = '30px';
-    hexInput.style.border = 'none';
-    hexInput.style.background = '#e0e5ec';
-    hexInput.style.boxShadow = 'inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff';
-    hexInput.style.fontFamily = 'monospace';
-    
-    const hexBtn = document.createElement('button');
-    hexBtn.innerHTML = '<i class="fas fa-check"></i>';
-    hexBtn.style.width = '36px';
-    hexBtn.style.height = '36px';
-    hexBtn.style.borderRadius = '50%';
-    hexBtn.style.border = 'none';
-    hexBtn.style.background = '#4c9a8c';
-    hexBtn.style.color = 'white';
-    hexBtn.style.cursor = 'pointer';
-    hexBtn.style.boxShadow = '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff';
-    
-    hexContainer.appendChild(hexInput);
-    hexContainer.appendChild(hexBtn);
-    
-    // Assemble
-    hueContainer.appendChild(hueLabel);
-    hueContainer.appendChild(hueSlider);
-    satContainer.appendChild(satLabel);
-    satContainer.appendChild(satSlider);
-    lightContainer.appendChild(lightLabel);
-    lightContainer.appendChild(lightSlider);
-    
-    colorDropdown.appendChild(hueContainer);
-    colorDropdown.appendChild(satContainer);
-    colorDropdown.appendChild(lightContainer);
-    colorDropdown.appendChild(previewContainer);
+    colorDropdown.appendChild(colorInput);
+    colorDropdown.appendChild(hexInput);
     colorDropdown.appendChild(insertBtn);
-    colorDropdown.appendChild(hexContainer);
     
-    // 7. COULEURS PRÉDÉFINIES (grille)
-    const presetTitle = document.createElement('div');
-    presetTitle.style.padding = '8px 8px 4px';
-    presetTitle.style.fontSize = '11px';
-    presetTitle.style.fontWeight = '600';
-    presetTitle.style.color = '#4a4e69';
-    presetTitle.textContent = 'PRÉDÉFINIES';
-    
-    const presetGrid = document.createElement('div');
-    presetGrid.style.display = 'grid';
-    presetGrid.style.gridTemplateColumns = 'repeat(4, 1fr)';
-    presetGrid.style.gap = '6px';
-    presetGrid.style.padding = '8px';
-    
-    const presets = [
-        '#ff6b6b', '#4c9a8c', '#51cf66', '#ffd93d',
-        '#9775fa', '#ff922b', '#f783ac', '#868e96'
-    ];
-    
-    presets.forEach(color => {
-        const swatch = document.createElement('button');
-        swatch.style.width = '100%';
-        swatch.style.aspectRatio = '1';
-        swatch.style.borderRadius = '12px';
-        swatch.style.border = 'none';
-        swatch.style.background = color;
-        swatch.style.boxShadow = '3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff';
-        swatch.style.cursor = 'pointer';
-        swatch.addEventListener('click', () => {
-            updateColorPreview(color);
-            hexInput.value = color;
-        });
-        presetGrid.appendChild(swatch);
+    // Synchronisation color picker ↔ hex input
+    colorInput.addEventListener('input', () => {
+        hexInput.value = colorInput.value;
     });
     
-    colorDropdown.appendChild(presetTitle);
-    colorDropdown.appendChild(presetGrid);
-    
-    // Fonction mise à jour aperçu
-    function updateColorPreview(color) {
-        previewColor.style.background = color;
-        previewText.textContent = color;
-        hexInput.value = color;
-    }
-    
-    // Fonction HSL vers HEX
-    function hslToHex(h, s, l) {
-        l /= 100;
-        const a = s * Math.min(l, 1 - l) / 100;
-        const f = n => {
-            const k = (n + h / 30) % 12;
-            const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-            return Math.round(255 * color).toString(16).padStart(2, '0');
-        };
-        return `#${f(0)}${f(8)}${f(4)}`;
-    }
-    
-    // Événements sliders
-    function updateFromSliders() {
-        const h = parseInt(hueSlider.value);
-        const s = parseInt(satSlider.value);
-        const l = parseInt(lightSlider.value);
-        
-        document.getElementById('hue-value').textContent = `${h}°`;
-        document.getElementById('sat-value').textContent = `${s}%`;
-        document.getElementById('light-value').textContent = `${l}%`;
-        
-        const hex = hslToHex(h, s, l);
-        updateColorPreview(hex);
-    }
-    
-    hueSlider.addEventListener('input', updateFromSliders);
-    satSlider.addEventListener('input', updateFromSliders);
-    lightSlider.addEventListener('input', updateFromSliders);
-    
-    // Input hex manuel
-    hexInput.addEventListener('input', (e) => {
-        let val = e.target.value;
-        if (val.match(/^#[0-9A-Fa-f]{0,6}$/)) {
-            if (val.length === 4 || val.length === 7) {
-                updateColorPreview(val);
-                // Met à jour sliders approximativement
-                // (conversion hex->hsl trop complexe, on laisse)
-            }
+    hexInput.addEventListener('input', () => {
+        if (hexInput.value.match(/^#[0-9A-Fa-f]{6}$/)) {
+            colorInput.value = hexInput.value;
         }
     });
     
-    hexBtn.addEventListener('click', () => {
-        let color = hexInput.value;
-        if (!color.match(/^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{3}$/)) {
-            color = '#4c9a8c';
-            hexInput.value = color;
-        }
-        updateColorPreview(color);
-        insertColor(color);
-    });
-    
-    // Bouton insérer
     insertBtn.addEventListener('click', () => {
-        insertColor(previewText.textContent);
+        insertColor(hexInput.value);
     });
-    
-    // Initialisation
-    updateFromSliders();
 }
 
 function insertColor(color) {
-    if (!color.match(/^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{3}$/)) {
+    if (!color.match(/^#[0-9A-Fa-f]{6}$/)) {
         color = '#4c9a8c';
     }
     
@@ -624,12 +357,11 @@ function insertColor(color) {
     }
     
     if (editor) {
-        const cursor = editor.getCursor();
-        editor.replaceRange(color, cursor);
+        const cursor = editor.getCursorPosition();
+        editor.session.insert(cursor, color);
         editor.focus();
     }
     
-    // Ferme dropdown
     document.getElementById('color-picker-btn')?.parentElement.classList.remove('active');
 }
 
@@ -643,16 +375,16 @@ function initAccessibility() {
     
     fontPlus?.addEventListener('click', () => {
         fontSize = Math.min(fontSize + 1, 20);
-        document.querySelectorAll('.CodeMirror').forEach(cm => {
-            cm.style.fontSize = fontSize + 'px';
+        document.querySelectorAll('.ace_editor').forEach(editor => {
+            editor.style.fontSize = fontSize + 'px';
         });
         localStorage.setItem('editor_font_size', fontSize);
     });
     
     fontMinus?.addEventListener('click', () => {
         fontSize = Math.max(fontSize - 1, 10);
-        document.querySelectorAll('.CodeMirror').forEach(cm => {
-            cm.style.fontSize = fontSize + 'px';
+        document.querySelectorAll('.ace_editor').forEach(editor => {
+            editor.style.fontSize = fontSize + 'px';
         });
         localStorage.setItem('editor_font_size', fontSize);
     });
@@ -660,8 +392,8 @@ function initAccessibility() {
     const savedSize = localStorage.getItem('editor_font_size');
     if (savedSize) {
         fontSize = parseInt(savedSize);
-        document.querySelectorAll('.CodeMirror').forEach(cm => {
-            cm.style.fontSize = fontSize + 'px';
+        document.querySelectorAll('.ace_editor').forEach(editor => {
+            editor.style.fontSize = fontSize + 'px';
         });
     }
     
