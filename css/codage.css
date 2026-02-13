@@ -641,3 +641,96 @@ body.dark-mode .site-title {
 body.dark-mode .site-title:hover {
     text-shadow: 0 0 20px rgba(76, 154, 140, 1), 0 0 40px rgba(76, 154, 140, 0.8);
 }
+/* À AJOUTER dans codage.css */
+
+/* Projet sélectionné dans la sidebar */
+.project-btn.selected {
+    border: 2px solid #4c9a8c !important;
+    box-shadow: 0 0 0 2px rgba(76, 154, 140, 0.3), 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff !important;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+body.dark-mode .project-btn.selected {
+    border-color: #6ab3a3 !important;
+    box-shadow: 0 0 0 2px rgba(106, 179, 163, 0.3), 5px 5px 10px #1a1b1e, -5px -5px 10px #3a3c42 !important;
+}
+
+/* Boutons du header activés (dropdowns ouverts) */
+.dropdown-group.active .pill-icon {
+    border: 2px solid #4c9a8c !important;
+    box-shadow: 0 0 0 2px rgba(76, 154, 140, 0.3), inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff !important;
+}
+
+/* Bouton console activé */
+#console-toggle.active {
+    border: 2px solid #4c9a8c !important;
+    color: #4c9a8c !important;
+    box-shadow: 0 0 0 2px rgba(76, 154, 140, 0.3), 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff !important;
+}
+
+/* Onglets actifs dans l'éditeur */
+.editor-header .tab-btn.active {
+    border: 2px solid #4c9a8c !important;
+    color: #4c9a8c !important;
+    box-shadow: 0 0 0 2px rgba(76, 154, 140, 0.3), inset 3px 3px 6px #a3b1c6, inset -3px -3px 6px #ffffff !important;
+}
+
+body.dark-mode .editor-header .tab-btn.active {
+    border-color: #6ab3a3 !important;
+    color: #6ab3a3 !important;
+}
+
+/* Bouton run actif (optionnel) */
+.run-btn.active {
+    border: 2px solid #4c9a8c !important;
+    background: #4c9a8c !important;
+    color: white !important;
+    box-shadow: 0 0 0 2px rgba(76, 154, 140, 0.3), 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff !important;
+}
+
+/* Animation subtile */
+.project-btn.selected,
+.dropdown-group.active .pill-icon,
+#console-toggle.active,
+.editor-header .tab-btn.active {
+    animation: borderPulse 2s infinite;
+}
+
+@keyframes borderPulse {
+    0% {
+        border-color: #4c9a8c;
+        box-shadow: 0 0 0 2px rgba(76, 154, 140, 0.3), 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+    }
+    50% {
+        border-color: #6ab3a3;
+        box-shadow: 0 0 0 4px rgba(76, 154, 140, 0.5), 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+    }
+    100% {
+        border-color: #4c9a8c;
+        box-shadow: 0 0 0 2px rgba(76, 154, 140, 0.3), 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+    }
+}
+
+/* Pour mode nuit */
+body.dark-mode .project-btn.selected,
+body.dark-mode .dropdown-group.active .pill-icon,
+body.dark-mode #console-toggle.active,
+body.dark-mode .editor-header .tab-btn.active {
+    animation: borderPulseDark 2s infinite;
+}
+
+@keyframes borderPulseDark {
+    0% {
+        border-color: #6ab3a3;
+        box-shadow: 0 0 0 2px rgba(106, 179, 163, 0.3), 5px 5px 10px #1a1b1e, -5px -5px 10px #3a3c42;
+    }
+    50% {
+        border-color: #8fd9c9;
+        box-shadow: 0 0 0 4px rgba(106, 179, 163, 0.5), 5px 5px 10px #1a1b1e, -5px -5px 10px #3a3c42;
+    }
+    100% {
+        border-color: #6ab3a3;
+        box-shadow: 0 0 0 2px rgba(106, 179, 163, 0.3), 5px 5px 10px #1a1b1e, -5px -5px 10px #3a3c42;
+    }
+}
