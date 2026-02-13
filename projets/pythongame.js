@@ -1,8 +1,6 @@
 window.project = {
-    // Nom affiché dans la sidebar
     name: 'Space Shooter Python',
     
-    // Code HTML complet
     html: `
 <!DOCTYPE html>
 <html>
@@ -17,25 +15,25 @@ window.project = {
     <div class="game-wrapper">
         <div class="game-container">
             <div class="game-header">
-                <div class="score">Score: <span id="scoreDisplay">0</span></div>
-                <div class="lives">Vies: <span id="livesDisplay">3</span></div>
-                <div class="wave">Vague: <span id="waveDisplay">1</span></div>
+                <div class="score">🎯 Score: <span id="scoreDisplay">0</span></div>
+                <div class="lives">❤️ Vies: <span id="livesDisplay">3</span></div>
+                <div class="wave">🌊 Vague: <span id="waveDisplay">1</span></div>
             </div>
             
-            <canvas id="gameCanvas" width="800" height="500"></canvas>
+            <canvas id="gameCanvas" width="800" height="500" style="background: #0a0a2a;"></canvas>
             
             <div class="game-footer">
                 <div class="controls">
-                    <p>← → pour déplacer | Espace pour tirer</p>
+                    <p>← → pour déplacer | ␣ Espace pour tirer</p>
                 </div>
-                <button id="restartBtn" class="restart-btn">Nouvelle partie</button>
+                <button id="restartBtn" class="restart-btn">🚀 Nouvelle partie</button>
             </div>
             
             <div id="gameOver" class="game-over hidden">
-                <h2>GAME OVER</h2>
+                <h2>💀 GAME OVER 💀</h2>
                 <p>Score final: <span id="finalScore">0</span></p>
                 <p>Vagues complétées: <span id="finalWave">0</span></p>
-                <button onclick="window.restartGame()">Rejouer</button>
+                <button onclick="window.restartGame()">🔄 Rejouer</button>
             </div>
         </div>
     </div>
@@ -58,13 +56,12 @@ window.project = {
         final_wave_span = document["finalWave"]
         
         class Particle:
-            """Effets de particules pour les explosions"""
             def __init__(self, x, y, color):
                 self.x = x
                 self.y = y
-                self.vx = random.uniform(-3, 3)
-                self.vy = random.uniform(-3, 3)
-                self.size = random.randint(2, 5)
+                self.vx = random.uniform(-4, 4)
+                self.vy = random.uniform(-4, 4)
+                self.size = random.randint(3, 8)
                 self.color = color
                 self.life = 30
                 self.max_life = 30
@@ -72,13 +69,13 @@ window.project = {
             def update(self):
                 self.x += self.vx
                 self.y += self.vy
-                self.vy += 0.1  # gravité
+                self.vy += 0.2
                 self.life -= 1
                 
             def draw(self):
                 opacity = self.life / self.max_life
                 ctx.fillStyle = f"rgba({self.color}, {opacity})"
-                ctx.fillRect(self.x, self.y, self.size, self.size)
+                ctx.fillRect(int(self.x), int(self.y), self.size, self.size)
         
         class Player:
             def __init__(self):
@@ -93,41 +90,53 @@ window.project = {
                 self.triple_timer = 0
                 
             def move_left(self):
-                if self.x > 30:
+                if self.x > 40:
                     self.x -= self.speed
                     
             def move_right(self):
-                if self.x < 770:
+                if self.x < 760:
                     self.x += self.speed
                     
             def draw(self):
-                # Effet d'invincibilité (clignotement)
                 if self.invincible > 0 and self.invincible % 10 < 5:
                     return
                     
-                # Vaisseau principal
-                ctx.fillStyle = "#4CAF50"
+                # Corps du vaisseau (CYAN VIF)
+                ctx.fillStyle = "#00FFFF"
+                ctx.shadowColor = "#00FFFF"
+                ctx.shadowBlur = 20
+                
+                # Triangle principal
                 ctx.beginPath()
-                ctx.moveTo(self.x, self.y - 15)
-                ctx.lineTo(self.x + 20, self.y + 10)
-                ctx.lineTo(self.x + 5, self.y + 5)
-                ctx.lineTo(self.x, self.y + 10)
-                ctx.lineTo(self.x - 5, self.y + 5)
-                ctx.lineTo(self.x - 20, self.y + 10)
+                ctx.moveTo(self.x, self.y - 25)
+                ctx.lineTo(self.x + 25, self.y + 10)
+                ctx.lineTo(self.x + 10, self.y + 10)
+                ctx.lineTo(self.x, self.y + 5)
+                ctx.lineTo(self.x - 10, self.y + 10)
+                ctx.lineTo(self.x - 25, self.y + 10)
                 ctx.closePath()
                 ctx.fill()
                 
-                # Effet triple shot
+                # Réacteurs (ORANGE)
+                ctx.fillStyle = "#FF8800"
+                ctx.shadowColor = "#FF8800"
+                ctx.fillRect(self.x - 15, self.y + 5, 8, 12)
+                ctx.fillRect(self.x + 7, self.y + 5, 8, 12)
+                
+                # Effet triple shot (DORÉ)
                 if self.triple_shot:
                     ctx.fillStyle = "rgba(255, 215, 0, 0.3)"
+                    ctx.shadowBlur = 30
                     ctx.beginPath()
-                    ctx.arc(self.x, self.y - 20, 20, 0, 2 * math.pi)
+                    ctx.arc(self.x, self.y - 20, 30, 0, 2 * 3.14)
                     ctx.fill()
+                    
+                ctx.shadowBlur = 0
                     
             def hit(self):
                 if self.invincible <= 0:
                     self.lives -= 1
-                    self.invincible = 60  # 1 seconde à 60fps
+                    self.invincible = 60
                     return True
                 return False
                 
@@ -140,28 +149,26 @@ window.project = {
                         self.triple_shot = False
         
         class Bullet:
-            def __init__(self, x, y, angle=0):
+            def __init__(self, x, y):
                 self.x = x
                 self.y = y
-                self.speed = 8
-                self.size = 4
-                self.angle = angle
+                self.speed = 10
+                self.size = 6
                 
             def update(self):
-                if self.angle == 0:
-                    self.y -= self.speed
-                else:
-                    self.x += math.sin(self.angle) * self.speed
-                    self.y -= math.cos(self.angle) * self.speed
+                self.y -= self.speed
                     
             def draw(self):
-                ctx.fillStyle = "#FFD700"
+                ctx.fillStyle = "#FFFF00"
+                ctx.shadowColor = "#FFFF00"
+                ctx.shadowBlur = 15
                 ctx.beginPath()
-                ctx.arc(self.x, self.y, self.size, 0, 2 * math.pi)
+                ctx.arc(self.x, self.y, self.size, 0, 2 * 3.14)
                 ctx.fill()
+                ctx.shadowBlur = 0
                 
             def off_screen(self):
-                return self.y < 0 or self.x < 0 or self.x > 800
+                return self.y < 0
         
         class Enemy:
             def __init__(self, x, y, enemy_type=1):
@@ -174,15 +181,15 @@ window.project = {
                 if enemy_type == 1:
                     self.speed = 2
                     self.points = 10
-                    self.color = "#FF4444"
+                    self.color = "#FF4444"  # Rouge vif
                 elif enemy_type == 2:
                     self.speed = 1.5
                     self.points = 20
-                    self.color = "#FF8844"
+                    self.color = "#FFAA00"  # Orange vif
                 else:
                     self.speed = 1
                     self.points = 30
-                    self.color = "#FF44FF"
+                    self.color = "#FF44FF"  # Rose vif
                     
                 self.angle = 0
                 
@@ -195,29 +202,51 @@ window.project = {
                     self.angle += 0.1
                 else:
                     self.y += self.speed * 0.5
-                    if random.random() < 0.01:
-                        self.shoot()
-                        
+                    
             def draw(self):
                 ctx.fillStyle = self.color
+                ctx.shadowColor = self.color
+                ctx.shadowBlur = 15
                 
                 if self.type == 1:
-                    # Ennemi simple
+                    # Ennemi rouge carré
                     ctx.fillRect(self.x - 15, self.y - 12, 30, 24)
-                elif self.type == 2:
-                    # Ennemi serpent
-                    ctx.beginPath()
-                    ctx.arc(self.x, self.y, 15, 0, 2 * math.pi)
-                    ctx.fill()
-                else:
-                    # Ennemi boss
-                    ctx.fillStyle = "#FF44FF"
-                    ctx.fillRect(self.x - 20, self.y - 15, 40, 30)
+                    # Yeux blancs
+                    ctx.fillStyle = "white"
+                    ctx.shadowBlur = 0
+                    ctx.fillRect(self.x - 8, self.y - 5, 4, 4)
+                    ctx.fillRect(self.x + 4, self.y - 5, 4, 4)
                     
-            def shoot(self):
-                if random.random() < 0.02:
-                    return Bullet(self.x, self.y + 10, 0)
-                return None
+                elif self.type == 2:
+                    # Ennemi orange ovale
+                    ctx.beginPath()
+                    ctx.ellipse(self.x, self.y, 15, 10, 0, 0, 2 * 3.14)
+                    ctx.fill()
+                    # Yeux
+                    ctx.fillStyle = "black"
+                    ctx.shadowBlur = 0
+                    ctx.beginPath()
+                    ctx.arc(self.x - 5, self.y - 3, 3, 0, 2 * 3.14)
+                    ctx.fill()
+                    ctx.beginPath()
+                    ctx.arc(self.x + 5, self.y - 3, 3, 0, 2 * 3.14)
+                    ctx.fill()
+                    
+                else:
+                    # Ennemi violet en forme de boss
+                    ctx.fillStyle = self.color
+                    ctx.fillRect(self.x - 20, self.y - 15, 40, 30)
+                    # Yeux rouges
+                    ctx.fillStyle = "#FF0000"
+                    ctx.shadowBlur = 10
+                    ctx.beginPath()
+                    ctx.arc(self.x - 8, self.y - 5, 4, 0, 2 * 3.14)
+                    ctx.fill()
+                    ctx.beginPath()
+                    ctx.arc(self.x + 8, self.y - 5, 4, 0, 2 * 3.14)
+                    ctx.fill()
+                    
+                ctx.shadowBlur = 0
                     
         class PowerUp:
             def __init__(self, x, y):
@@ -230,20 +259,26 @@ window.project = {
                 self.y += self.speed
                 
             def draw(self):
+                ctx.font = "25px Arial"
+                ctx.shadowBlur = 20
                 if self.type == "triple":
                     ctx.fillStyle = "#FFD700"
-                    ctx.fillText("★", self.x - 5, self.y - 5)
+                    ctx.shadowColor = "#FFD700"
+                    ctx.fillText("⭐", self.x - 15, self.y)
                 elif self.type == "life":
                     ctx.fillStyle = "#FF4444"
-                    ctx.fillText("❤️", self.x - 5, self.y - 5)
+                    ctx.shadowColor = "#FF4444"
+                    ctx.fillText("❤️", self.x - 15, self.y)
                 else:
                     ctx.fillStyle = "#44FF44"
-                    ctx.fillText("💰", self.x - 5, self.y - 5)
+                    ctx.shadowColor = "#44FF44"
+                    ctx.fillText("💰", self.x - 15, self.y)
+                ctx.shadowBlur = 0
                     
             def apply(self, player, game):
                 if self.type == "triple":
                     player.triple_shot = True
-                    player.triple_timer = 300  # 5 secondes
+                    player.triple_timer = 300
                 elif self.type == "life":
                     player.lives += 1
                 else:
@@ -260,17 +295,25 @@ window.project = {
                 self.wave = 1
                 self.game_over = False
                 self.shoot_cooldown = 0
-                self.enemy_bullets = []
+                self.stars = []
                 
+                # Créer des étoiles
+                for i in range(100):
+                    self.stars.append({
+                        'x': random.randint(0, 800),
+                        'y': random.randint(0, 500),
+                        'size': random.randint(1, 3)
+                    })
+                    
             def spawn_wave(self):
-                enemies_count = 5 + self.wave * 2
+                enemies_count = 5 + self.wave
                 for i in range(enemies_count):
-                    x = random.randint(50, 750)
-                    y = random.randint(30, 200)
+                    x = 100 + (i * 70) % 600
+                    y = 50 + (i * 30)
                     enemy_type = 1
-                    if self.wave > 3 and random.random() < 0.3:
+                    if self.wave > 2 and random.random() < 0.3:
                         enemy_type = 2
-                    if self.wave > 5 and random.random() < 0.1:
+                    if self.wave > 4 and random.random() < 0.1:
                         enemy_type = 3
                     self.enemies.append(Enemy(x, y, enemy_type))
                     
@@ -278,98 +321,104 @@ window.project = {
                 if self.game_over:
                     return
                     
-                # Mettre à jour le joueur
                 self.player.update()
+                
+                # Mise à jour des étoiles
+                for star in self.stars:
+                    star['y'] += 1
+                    if star['y'] > 500:
+                        star['y'] = 0
+                        star['x'] = random.randint(0, 800)
                 
                 # Tir
                 if self.shoot_cooldown > 0:
                     self.shoot_cooldown -= 1
                     
-                # Mettre à jour les balles
+                # Balles
                 for bullet in self.bullets[:]:
                     bullet.update()
                     if bullet.off_screen():
                         self.bullets.remove(bullet)
                         
-                # Mettre à jour les ennemis
+                # Ennemis
                 for enemy in self.enemies[:]:
                     enemy.update()
                     
-                    # Collision avec les balles
+                    # Collisions balles
                     for bullet in self.bullets[:]:
-                        if (abs(bullet.x - enemy.x) < 20 and 
-                            abs(bullet.y - enemy.y) < 15):
+                        if (abs(bullet.x - enemy.x) < 25 and 
+                            abs(bullet.y - enemy.y) < 20):
                             if bullet in self.bullets:
                                 self.bullets.remove(bullet)
                             if enemy in self.enemies:
                                 self.enemies.remove(enemy)
                                 self.score += enemy.points
                                 
-                                # Explosion
-                                for _ in range(10):
-                                    color = "255, 68, 68"
-                                    self.particles.append(Particle(enemy.x, enemy.y, color))
+                                # Explosion colorée
+                                for _ in range(15):
+                                    color = enemy.color.replace("#", "")
+                                    r = int(color[0:2], 16)
+                                    g = int(color[2:4], 16)
+                                    b = int(color[4:6], 16)
+                                    self.particles.append(Particle(enemy.x, enemy.y, f"{r},{g},{b}"))
                                     
-                                # Chance de power-up
-                                if random.random() < 0.1:
+                                if random.random() < 0.15:
                                     self.powerups.append(PowerUp(enemy.x, enemy.y))
                                 break
                                 
-                    # Collision avec le joueur
-                    if (abs(enemy.x - self.player.x) < 25 and 
+                    # Collision joueur
+                    if (abs(enemy.x - self.player.x) < 30 and 
                         abs(enemy.y - self.player.y) < 25):
                         if self.player.hit():
                             for _ in range(20):
-                                color = "76, 175, 80"
-                                self.particles.append(Particle(self.player.x, self.player.y, color))
+                                self.particles.append(Particle(self.player.x, self.player.y, "0,255,255"))
+                            if enemy in self.enemies:
+                                self.enemies.remove(enemy)
+                                
+                    if enemy.y > 500:
+                        if enemy in self.enemies:
                             self.enemies.remove(enemy)
                             
-                    # Ennemi sorti de l'écran
-                    if enemy.y > 500:
-                        self.enemies.remove(enemy)
-                        if not self.player.hit():
-                            self.player.lives -= 1
-                            
-                # Mettre à jour les power-ups
+                # Power-ups
                 for power in self.powerups[:]:
                     power.update()
-                    if (abs(power.x - self.player.x) < 20 and 
-                        abs(power.y - self.player.y) < 20):
+                    if (abs(power.x - self.player.x) < 25 and 
+                        abs(power.y - self.player.y) < 25):
                         power.apply(self.player, self)
                         self.powerups.remove(power)
                     elif power.y > 500:
                         self.powerups.remove(power)
                         
-                # Mettre à jour les particules
+                # Particules
                 for particle in self.particles[:]:
                     particle.update()
                     if particle.life <= 0:
                         self.particles.remove(particle)
                         
-                # Vérifier si la vague est terminée
+                # Nouvelle vague
                 if len(self.enemies) == 0:
                     self.wave += 1
                     self.spawn_wave()
                     
-                # Vérifier game over
+                # Game over
                 if self.player.lives <= 0:
                     self.game_over = True
+                    final_score_span.textContent = str(self.score)
+                    final_wave_span.textContent = str(self.wave)
+                    game_over_div.classList.remove("hidden")
                     
             def draw(self):
-                ctx.clearRect(0, 0, 800, 500)
-                
-                # Fond étoilé
-                ctx.fillStyle = "#000022"
+                # Ciel étoilé
+                ctx.fillStyle = "#0a0a2a"
                 ctx.fillRect(0, 0, 800, 500)
                 
-                # Étoiles
-                ctx.fillStyle = "white"
-                for i in range(50):
-                    x = (i * 17 + time.time() * 10) % 800
-                    y = (i * 13) % 500
-                    ctx.fillRect(x, y, 2, 2)
-                    
-                # Dessiner les éléments
+                # Étoiles scintillantes
+                for star in self.stars:
+                    brightness = random.randint(150, 255)
+                    ctx.fillStyle = f"rgb({brightness}, {brightness}, {brightness})"
+                    ctx.fillRect(star['x'], star['y'], star['size'], star['size'])
+                
+                # Game elements
                 self.player.draw()
                 
                 for bullet in self.bullets:
@@ -384,7 +433,7 @@ window.project = {
                 for particle in self.particles:
                     particle.draw()
                     
-                # Mettre à jour l'affichage
+                # Mise à jour scores
                 score_span.textContent = str(self.score)
                 lives_span.textContent = str(self.player.lives)
                 wave_span.textContent = str(self.wave)
@@ -392,22 +441,24 @@ window.project = {
             def shoot(self):
                 if self.shoot_cooldown <= 0 and not self.game_over:
                     if self.player.triple_shot:
-                        self.bullets.append(Bullet(self.player.x, self.player.y - 15))
-                        self.bullets.append(Bullet(self.player.x - 10, self.player.y - 10, 0.2))
-                        self.bullets.append(Bullet(self.player.x + 10, self.player.y - 10, -0.2))
+                        self.bullets.append(Bullet(self.player.x, self.player.y - 20))
+                        self.bullets.append(Bullet(self.player.x - 15, self.player.y - 15))
+                        self.bullets.append(Bullet(self.player.x + 15, self.player.y - 15))
                     else:
-                        self.bullets.append(Bullet(self.player.x, self.player.y - 15))
-                    self.shoot_cooldown = 10
+                        self.bullets.append(Bullet(self.player.x, self.player.y - 20))
+                    self.shoot_cooldown = 8
                     
-        # Initialisation du jeu
+        # Initialisation
         game = Game()
         game.spawn_wave()
         
-        # Gestion des touches
+        # Contrôles
         keys = {}
         
         def on_key_down(event):
             keys[event.key] = True
+            if event.key == " ":  # Empêcher le défilement de la page
+                event.preventDefault()
             
         def on_key_up(event):
             keys[event.key] = False
@@ -433,18 +484,14 @@ window.project = {
             game.spawn_wave()
             game_over_div.classList.add("hidden")
             
-        # Exposer restart_game à JavaScript
         window.restartGame = restart_game
-        
-        # Lancer le jeu
-        timer.set_interval(update_game, 16)  # ~60 FPS
+        timer.set_interval(update_game, 16)
         
     <\/script>
 </body>
 </html>
 `,
     
-    // Code CSS
     css: `
 * {
     margin: 0;
@@ -454,12 +501,11 @@ window.project = {
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #0b0b2b 0%, #1a1a3a 100%);
+    background: linear-gradient(135deg, #000428 0%, #004e92 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
 }
 
 .game-wrapper {
@@ -467,40 +513,41 @@ body {
 }
 
 .game-container {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+    border: 1px solid rgba(0, 255, 255, 0.3);
 }
 
 .game-header {
     display: flex;
     justify-content: space-between;
     padding: 15px 25px;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
     margin-bottom: 15px;
     color: white;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
-    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    border: 1px solid #00ffff;
+    text-shadow: 0 0 10px cyan;
 }
 
 .score, .lives, .wave {
     padding: 5px 20px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(0, 255, 255, 0.1);
     border-radius: 5px;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid rgba(0, 255, 255, 0.5);
 }
 
 #gameCanvas {
     display: block;
     margin: 0 auto;
     border-radius: 10px;
-    box-shadow: 0 0 30px rgba(0,255,255,0.3);
-    background: #000022;
+    box-shadow: 0 0 30px cyan;
+    cursor: none;
 }
 
 .game-footer {
@@ -511,26 +558,31 @@ body {
 
 .controls p {
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 18px;
     text-shadow: 0 0 5px cyan;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px;
+    border-radius: 5px;
 }
 
 .restart-btn {
-    background: linear-gradient(45deg, #ff4444, #ff8844);
+    background: linear-gradient(45deg, cyan, blue);
     color: white;
     border: none;
-    padding: 10px 30px;
-    font-size: 16px;
+    padding: 12px 35px;
+    font-size: 18px;
     font-weight: bold;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid white;
+    text-shadow: 0 0 5px black;
 }
 
 .restart-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(255,68,68,0.4);
+    box-shadow: 0 10px 30px cyan;
+    background: linear-gradient(45deg, #00ffff, #0066ff);
 }
 
 .game-over {
@@ -538,37 +590,38 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.95);
+    background: rgba(0, 0, 0, 0.95);
     padding: 40px;
     border-radius: 20px;
     text-align: center;
     color: white;
-    border: 2px solid #ff4444;
-    box-shadow: 0 0 50px #ff4444;
+    border: 3px solid cyan;
+    box-shadow: 0 0 100px cyan;
     z-index: 1000;
-    animation: pulse 2s infinite;
+    animation: glow 2s infinite;
 }
 
-@keyframes pulse {
-    0%, 100% { box-shadow: 0 0 50px #ff4444; }
-    50% { box-shadow: 0 0 80px #ff4444; }
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 50px cyan; }
+    50% { box-shadow: 0 0 100px cyan; }
 }
 
 .game-over h2 {
     font-size: 48px;
     margin-bottom: 20px;
-    color: #ff4444;
-    text-shadow: 0 0 20px #ff4444;
+    color: cyan;
+    text-shadow: 0 0 20px cyan;
 }
 
 .game-over p {
     font-size: 24px;
     margin-bottom: 15px;
+    color: white;
 }
 
 .game-over button {
-    background: #ff4444;
-    color: white;
+    background: cyan;
+    color: black;
     border: none;
     padding: 15px 40px;
     font-size: 20px;
@@ -577,13 +630,13 @@ body {
     cursor: pointer;
     margin-top: 20px;
     transition: all 0.3s ease;
-    border: 1px solid white;
+    border: 2px solid white;
 }
 
 .game-over button:hover {
     transform: scale(1.1);
-    background: #ff6666;
-    box-shadow: 0 0 30px #ff4444;
+    background: #00ffff;
+    box-shadow: 0 0 50px cyan;
 }
 
 .hidden {
@@ -597,6 +650,5 @@ body {
 }
 `,
     
-    // Code JavaScript (vide car Brython gère tout)
-    js: `// Le jeu est écrit en Python dans la balise script type="text/python"`
+    js: `// Le jeu est en Python dans la balise script`
 };
