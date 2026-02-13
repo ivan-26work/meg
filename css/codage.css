@@ -530,3 +530,74 @@ body.dark-mode .dropdown-vertical {
     background: #2d2f33;
     box-shadow: 9px 9px 16px #1a1b1e, -9px -9px 16px #3a3c42;
 }
+.console-controls {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.console-time {
+    color: #666;
+    margin-right: 10px;
+    font-size: 11px;
+}
+
+.console-line {
+    padding: 4px 8px;
+    border-bottom: 1px solid #2a2c37;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.console-error { color: #ff6b6b; border-left: 3px solid #ff6b6b; }
+.console-log { color: #b8c1e0; border-left: 3px solid #4c9a8c; }
+.console-warn { color: #ffd93d; border-left: 3px solid #ffd93d; }
+.console-info { color: #74b9ff; border-left: 3px solid #74b9ff; }
+.console-command { color: #a3b1c6; border-left: 3px solid #a3b1c6; font-style: italic; }
+/* Pour les wrappers ACE */
+.ace-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.editor-container {
+    position: relative;
+    height: 100%;
+    min-height: 500px; /* Hauteur minimale */
+    width: 100%;
+    background: #282a36;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* Assure que l'éditeur prend toute la place */
+.ace_editor {
+    height: 100% !important;
+    width: 100% !important;
+}
+.editor-container {
+    position: relative;
+    height: 100%;
+    min-height: 60vh;
+}
+
+.ace-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+}
+
+.ace_editor {
+    height: 100% !important;
+    width: 100% !important;
+}
