@@ -1,4 +1,4 @@
-// js/preview.js
+// preview.js - Version améliorée avec loader 3 secondes
 
 document.addEventListener('DOMContentLoaded', () => {
     initPreview();
@@ -19,8 +19,10 @@ function initPreview() {
         const title = extractTitle(html) || 'projet.html';
         document.getElementById('projectTitle').textContent = title;
         
-        // Génère le rendu
-        renderPreview(html, css, js);
+        // Affiche le loader pendant 3 secondes puis le rendu
+        showLoaderWithProgress(() => {
+            renderPreview(html, css, js);
+        });
         
     } catch (e) {
         showError('Erreur de chargement');
@@ -30,12 +32,33 @@ function initPreview() {
     // Bouton retour
     document.getElementById('back-btn').addEventListener('click', () => {
         window.close();
-        // Fallback si window.close ne fonctionne pas
         setTimeout(() => window.location.href = 'codage.html', 100);
     });
 
     // Bouton téléchargement
     document.getElementById('download-btn').addEventListener('click', downloadZip);
+}
+
+function showLoaderWithProgress(callback) {
+    const loader = document.getElementById('previewLoader');
+    const iframe = document.getElementById('preview-iframe');
+    
+    // Cache l'iframe pendant le chargement
+    iframe.style.opacity = '0';
+    loader.classList.remove('hidden');
+    
+    // Animation de 3 secondes
+    setTimeout(() => {
+        // Cache le loader
+        loader.classList.add('hidden');
+        
+        // Affiche l'iframe avec transition
+        iframe.style.transition = 'opacity 0.5s ease';
+        iframe.style.opacity = '1';
+        
+        // Exécute le callback
+        if (callback) callback();
+    }, 3000);
 }
 
 function renderPreview(html, css, js) {
@@ -67,7 +90,11 @@ function extractTitle(html) {
 }
 
 function showError(message) {
+    const loader = document.getElementById('previewLoader');
     const iframe = document.getElementById('preview-iframe');
+    
+    loader.classList.add('hidden');
+    iframe.style.opacity = '1';
     iframe.srcdoc = `<div style="
         display: flex;
         justify-content: center;
@@ -78,8 +105,6 @@ function showError(message) {
         background: #f5f5f5;
     ">❌ ${message}</div>`;
 }
-
-// js/preview.js - Correction ZIP
 
 async function downloadZip() {
     const data = localStorage.getItem('preview_data');
@@ -93,14 +118,12 @@ async function downloadZip() {
         const title = extractTitle(html) || 'projet';
         const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'projet';
         
-        // Charge JSZip depuis CDN
         if (!window.JSZip) {
             await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
         }
         
         const zip = new JSZip();
         
-        // Nettoie les chemins dans le HTML
         const cleanHtml = html
             .replace(/<link rel="stylesheet" href="style\.css">/, '<link rel="stylesheet" href="style.css">')
             .replace(/<script src="script\.js"><\/script>/, '<script src="script.js"><\/script>');
@@ -124,7 +147,6 @@ async function downloadZip() {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
-        // Feedback
         const btn = document.getElementById('download-btn');
         btn.style.color = '#4c9a8c';
         setTimeout(() => btn.style.color = '', 500);
