@@ -1,142 +1,109 @@
-// js/console.js
+// js/console.js - Gestion complète de la console
 
 document.addEventListener('DOMContentLoaded', () => {
     initConsole();
 });
 
 function initConsole() {
+    const consoleBtn = document.getElementById('console-toggle');
     const consolePanel = document.getElementById('consolePanel');
-    if (!consolePanel) return;
-
-    // Ajoute les contrôles console
-    addConsoleControls();
+    const closeBtn = document.getElementById('close-console');
+    const clearBtn = document.getElementById('clear-console');
+    const consoleContent = document.getElementById('consoleContent');
     
-    // Écoute les changements dans l'éditeur JS
-    if (window.editors?.js) {
-        window.editors.js.on('change', debounce(() => {
+    if (!consolePanel || !consoleContent) return;
+    
+    // État initial
+    consolePanel.classList.add('hidden');
+    
+    // Ouverture/fermeture
+    if (consoleBtn) {
+        consoleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            consolePanel.classList.toggle('hidden');
+            
             if (!consolePanel.classList.contains('hidden')) {
-                executeAndCapture();
-            }
-        }, 800));
-    }
-    
-    // Capture au premier affichage
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.attributeName === 'class') {
-                if (!consolePanel.classList.contains('hidden')) {
-                    clearConsole();
-                    executeAndCapture();
-                }
+                captureConsoleMethods();
+                // Exécute le code JS actuel dans la console
+                executeCurrentCode();
             }
         });
-    });
-    
-    observer.observe(consolePanel, { attributes: true });
-}
-
-function addConsoleControls() {
-    const consoleHeader = document.querySelector('.console-header');
-    if (!consoleHeader) return;
-    
-    // Garde le bouton close existant, ajoute nouveaux contrôles
-    const closeBtn = consoleHeader.querySelector('#close-console');
-    
-    // Crée groupe de contrôles gauche
-    const controlsLeft = document.createElement('div');
-    controlsLeft.className = 'console-controls-left';
-    
-    // Bouton copier
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'pill-icon small';
-    copyBtn.title = 'Copier la console';
-    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
-    copyBtn.addEventListener('click', copyConsoleContent);
-    
-    // Bouton effacer
-    const clearBtn = document.createElement('button');
-    clearBtn.className = 'pill-icon small';
-    clearBtn.title = 'Effacer la console';
-    clearBtn.innerHTML = '<i class="fas fa-trash"></i>';
-    clearBtn.addEventListener('click', clearConsole);
-    
-    // Input ligne de commande
-    const commandInput = document.createElement('input');
-    commandInput.type = 'text';
-    commandInput.className = 'console-command';
-    commandInput.placeholder = '› Exécuter du code... (Entrée)';
-    commandInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            executeCommand(commandInput.value);
-            commandInput.value = '';
-        }
-    });
-    
-    controlsLeft.appendChild(copyBtn);
-    controlsLeft.appendChild(clearBtn);
-    
-    // Insère les contrôles avant le closeBtn
-    consoleHeader.insertBefore(controlsLeft, consoleHeader.firstChild);
-    consoleHeader.insertBefore(commandInput, closeBtn);
-}
-
-function executeCommand(code) {
-    if (!code.trim()) return;
-    
-    // Affiche la commande
-    appendToConsole('command', `› ${code}`);
-    
-    try {
-        // Crée une fonction pour évaluer le code dans le contexte de la page
-        const result = eval(code);
-        
-        // Affiche le résultat
-        if (result !== undefined) {
-            let output;
-            if (result instanceof Promise) {
-                output = 'Promise { <pending> }';
-                result.then(val => {
-                    appendToConsole('log', `Promise résolue: ${formatArg(val)}`);
-                }).catch(err => {
-                    appendToConsole('error', `Promise rejetée: ${formatArg(err)}`);
-                });
-            } else {
-                output = formatArg(result);
-                appendToConsole('log', output);
-            }
-        }
-    } catch (error) {
-        appendToConsole('error', error.toString());
     }
-}
-
-function copyConsoleContent() {
-    const consoleContent = document.getElementById('consoleContent');
-    if (!consoleContent) return;
     
-    const text = Array.from(consoleContent.children)
-        .map(line => line.textContent)
-        .join('\n');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            consolePanel.classList.add('hidden');
+        });
+    }
     
-    navigator.clipboard.writeText(text).then(() => {
-        // Feedback visuel
-        const copyBtn = document.querySelector('.console-controls-left .fa-copy');
-        if (copyBtn) {
-            copyBtn.style.color = '#4c9a8c';
-            setTimeout(() => copyBtn.style.color = '', 500);
+    // Bouton effacer (à ajouter dans le HTML)
+    if (clearBtn) {
+        clearBtn.addEventListener('click', clearConsole);
+    }
+    
+    // Capture les erreurs globales
+    window.addEventListener('error', (event) => {
+        if (!consolePanel.classList.contains('hidden')) {
+            appendToConsole('error', `${event.message} (ligne ${event.lineno})`);
         }
     });
+    
+    window.addEventListener('unhandledrejection', (event) => {
+        if (!consolePanel.classList.contains('hidden')) {
+            appendToConsole('error', `Promise non gérée : ${event.reason}`);
+        }
+    });
+    
+    // Sauvegarde des méthodes originales
+    storeOriginalConsole();
 }
 
-function executeAndCapture() {
-    clearConsole();
+let originalConsole = {};
+
+function storeOriginalConsole() {
+    originalConsole = {
+        log: console.log,
+        error: console.error,
+        warn: console.warn,
+        info: console.info
+    };
+}
+
+function captureConsoleMethods() {
+    // Restaure d'abord les originales
+    console.log = originalConsole.log;
+    console.error = originalConsole.error;
+    console.warn = originalConsole.warn;
+    console.info = originalConsole.info;
     
+    // Puis les surcharge
+    console.log = function(...args) {
+        appendToConsole('log', args.map(formatArg).join(' '));
+        originalConsole.log.apply(console, args);
+    };
+    
+    console.error = function(...args) {
+        appendToConsole('error', args.map(formatArg).join(' '));
+        originalConsole.error.apply(console, args);
+    };
+    
+    console.warn = function(...args) {
+        appendToConsole('warn', args.map(formatArg).join(' '));
+        originalConsole.warn.apply(console, args);
+    };
+    
+    console.info = function(...args) {
+        appendToConsole('info', args.map(formatArg).join(' '));
+        originalConsole.info.apply(console, args);
+    };
+}
+
+function executeCurrentCode() {
     const jsCode = window.editors?.js?.getValue() || '';
     if (!jsCode.trim()) return;
     
-    captureConsoleMethods();
-    
     try {
+        // Crée une fonction async pour exécuter le code
         const asyncWrapper = new Function(`
             return (async () => {
                 try {
@@ -153,45 +120,10 @@ function executeAndCapture() {
     }
 }
 
-function captureConsoleMethods() {
-    const originalLog = console.log;
-    const originalError = console.error;
-    const originalWarn = console.warn;
-    const originalInfo = console.info;
-    
-    console.log = function(...args) {
-        appendToConsole('log', args.map(formatArg).join(' '));
-        originalLog.apply(console, args);
-    };
-    
-    console.error = function(...args) {
-        appendToConsole('error', args.map(formatArg).join(' '));
-        originalError.apply(console, args);
-    };
-    
-    console.warn = function(...args) {
-        appendToConsole('warn', args.map(formatArg).join(' '));
-        originalWarn.apply(console, args);
-    };
-    
-    console.info = function(...args) {
-        appendToConsole('log', args.map(formatArg).join(' '));
-        originalInfo.apply(console, args);
-    };
-    
-    window.onerror = (msg, url, line, col, error) => {
-        appendToConsole('error', `${msg} (ligne ${line})`);
-    };
-    
-    window.onunhandledrejection = (event) => {
-        appendToConsole('error', `Promise non gérée : ${event.reason}`);
-    };
-}
-
 function formatArg(arg) {
     if (arg === null) return 'null';
     if (arg === undefined) return 'undefined';
-    if (arg instanceof Error) return arg.message;
+    if (arg instanceof Error) return arg.toString();
     if (typeof arg === 'object') {
         try {
             return JSON.stringify(arg, null, 2);
@@ -205,27 +137,24 @@ function formatArg(arg) {
 function appendToConsole(type, message) {
     const consoleContent = document.getElementById('consoleContent');
     if (!consoleContent) return;
-
+    
     const line = document.createElement('div');
     line.className = `console-line console-${type}`;
     
-    const timestamp = new Date().toLocaleTimeString('fr-FR', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-    });
-
-    let icon = '';
+    const now = new Date();
+    const timestamp = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+    
+    let icon = '📋';
     if (type === 'error') icon = '❌';
-    if (type === 'log') icon = '📋';
     if (type === 'warn') icon = '⚠️';
-    if (type === 'command') icon = '›';
-
+    if (type === 'info') icon = 'ℹ️';
+    
     line.innerHTML = `<span class="console-time">[${timestamp}]</span> ${icon} ${message}`;
     
     consoleContent.appendChild(line);
     consoleContent.scrollTop = consoleContent.scrollHeight;
-
+    
+    // Limite à 200 lignes
     while (consoleContent.children.length > 200) {
         consoleContent.removeChild(consoleContent.children[0]);
     }
@@ -238,17 +167,22 @@ function clearConsole() {
     }
 }
 
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
+// Commande manuelle dans la console
+function executeCommand(command) {
+    if (!command.trim()) return;
+    
+    appendToConsole('command', `› ${command}`);
+    
+    try {
+        const result = eval(command);
+        if (result !== undefined) {
+            appendToConsole('log', formatArg(result));
+        }
+    } catch (error) {
+        appendToConsole('error', error.toString());
+    }
 }
 
+// Exposition globale
 window.clearConsole = clearConsole;
-window.executeAndCapture = executeAndCapture;
+window.executeCommand = executeCommand;
