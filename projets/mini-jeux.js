@@ -1,6 +1,6 @@
 window.project = {
     // Nom affiché dans la sidebar
-    name: 'Runner Game',
+    name: 'Quiz HTML Infini',
     
     // Code HTML complet
     html: `
@@ -9,35 +9,36 @@ window.project = {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Runner Game</title>
+    <title>Quiz HTML Infini</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <div class="game-header">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="high-score">Record: <span id="highScore">0</span></div>
-        </div>
-        
-        <canvas id="gameCanvas" width="400" height="600"></canvas>
-        
-        <div class="game-controls">
-            <p class="desktop-hint">← Glisser gauche | → Glisser droit | ↓ Sauter</p>
-            
-            <!-- Contrôles tactiles -->
-            <div class="touch-controls">
-                <button class="touch-btn" id="moveLeft" aria-label="Glisser à gauche">←</button>
-                <button class="touch-btn" id="jumpBtn" aria-label="Sauter">⬇️</button>
-                <button class="touch-btn" id="moveRight" aria-label="Glisser à droite">→</button>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <div class="stats">
+                <div class="score">Score: <span id="score">0</span></div>
+                <div class="streak">🔥 <span id="streak">0</span></div>
             </div>
-            
-            <button id="restartBtn" class="restart-btn">Nouvelle partie</button>
+            <div class="timer" id="timer">⏱️ 10s</div>
         </div>
         
-        <div id="gameOver" class="game-over hidden">
-            <h2>Game Over!</h2>
-            <p>Score: <span id="finalScore">0</span></p>
-            <button onclick="restartGame()">Rejouer</button>
+        <div class="question-container">
+            <div class="question-number" id="questionNumber">Question #<span id="currentQuestion">1</span></div>
+            <h2 class="question" id="question">Chargement...</h2>
+        </div>
+        
+        <div class="options-container" id="options">
+            <!-- Les options seront générées ici -->
+        </div>
+        
+        <div class="feedback" id="feedback"></div>
+        
+        <div class="game-over hidden" id="gameOver">
+            <h2>Quiz Terminé!</h2>
+            <p>Score final: <span id="finalScore">0</span></p>
+            <p>Meilleur score: <span id="bestScore">0</span></p>
+            <p>Questions répondues: <span id="totalQuestions">0</span></p>
+            <button onclick="restartQuiz()">Nouvelle partie</button>
         </div>
     </div>
     <script src="script.js"><\/script>
@@ -54,122 +55,165 @@ window.project = {
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.game-container {
-    background: #1a1a2e;
     padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    max-width: 500px;
-    width: 100%;
 }
 
-.game-header {
+.quiz-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+}
+
+.quiz-header {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
-    margin-bottom: 10px;
-    background: #16213e;
-    border-radius: 10px;
-    color: white;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.stats {
+    display: flex;
+    gap: 20px;
+}
+
+.score, .streak {
     font-size: 18px;
     font-weight: bold;
-}
-
-.score, .high-score {
-    padding: 5px 15px;
-    background: #0f3460;
-    border-radius: 5px;
-}
-
-#gameCanvas {
-    display: block;
-    margin: 0 auto;
-    background: linear-gradient(180deg, #87CEEB 0%, #98D8E8 100%);
+    padding: 8px 15px;
     border-radius: 10px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    width: 100%;
-    height: auto;
-    touch-action: none; /* Empêche le défilement tactile */
 }
 
-.game-controls {
-    text-align: center;
-    margin-top: 15px;
+.score {
+    background: #667eea;
     color: white;
 }
 
-.desktop-hint {
-    margin-bottom: 15px;
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* Contrôles tactiles */
-.touch-controls {
-    display: none; /* Caché par défaut sur desktop */
-    justify-content: center;
-    gap: 20px;
-    margin: 20px 0;
-}
-
-.touch-btn {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
+.streak {
+    background: #ff6b6b;
     color: white;
-    font-size: 32px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    transition: all 0.1s ease;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    touch-action: manipulation; /* Optimise pour le tactile */
 }
 
-.touch-btn:active {
-    transform: scale(0.9);
-    background: rgba(255, 255, 255, 0.4);
-}
-
-/* Afficher les contrôles tactiles seulement sur mobile/tablette */
-@media (max-width: 768px) {
-    .touch-controls {
-        display: flex;
-    }
-    
-    .desktop-hint {
-        display: none;
-    }
-}
-
-.restart-btn {
-    background: #e94560;
-    color: white;
-    border: none;
-    padding: 10px 30px;
-    font-size: 16px;
+.timer {
+    font-size: 24px;
     font-weight: bold;
-    border-radius: 5px;
+    color: #333;
+    background: #f0f0f0;
+    padding: 8px 20px;
+    border-radius: 10px;
+}
+
+.timer.warning {
+    color: #ff6b6b;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.question-container {
+    margin-bottom: 30px;
+}
+
+.question-number {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.question {
+    font-size: 24px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.options-container {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.option {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 15px 20px;
+    font-size: 16px;
+    text-align: left;
     cursor: pointer;
     transition: all 0.3s ease;
-    margin-top: 10px;
-    touch-action: manipulation;
+    position: relative;
+    overflow: hidden;
 }
 
-.restart-btn:hover {
-    background: #ff6b8b;
+.option:hover:not(.disabled) {
+    background: #e9ecef;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.option.correct {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.option.incorrect {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+.option.disabled {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    transition: background 0.3s ease;
+}
+
+.option:hover::before:not(.disabled) {
+    background: #667eea;
+}
+
+.feedback {
+    text-align: center;
+    font-size: 18px;
+    min-height: 40px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.feedback.correct {
+    background: #d4edda;
+    color: #155724;
+}
+
+.feedback.incorrect {
+    background: #f8d7da;
+    color: #721c24;
 }
 
 .game-over {
@@ -177,405 +221,437 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(26, 26, 46, 0.95);
+    background: white;
     padding: 40px;
     border-radius: 20px;
     text-align: center;
-    color: white;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    max-width: 400px;
+    width: 90%;
 }
 
 .game-over h2 {
-    font-size: 36px;
+    font-size: 32px;
+    color: #333;
     margin-bottom: 20px;
-    color: #e94560;
 }
 
 .game-over p {
-    font-size: 24px;
-    margin-bottom: 30px;
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 10px;
 }
 
 .game-over button {
-    background: #e94560;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     padding: 15px 40px;
     font-size: 18px;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
+    margin-top: 20px;
     transition: all 0.3s ease;
-    touch-action: manipulation;
 }
 
 .game-over button:hover {
-    background: #ff6b8b;
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
 }
 
 .hidden {
     display: none;
 }
+
+@media (max-width: 480px) {
+    .quiz-container {
+        padding: 20px;
+    }
+    
+    .quiz-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .question {
+        font-size: 20px;
+    }
+    
+    .option {
+        padding: 12px 15px;
+    }
+}
+
+/* Animation pour les bonnes réponses */
+@keyframes correctFlash {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); background: #d4edda; }
+}
+
+.correct-answer {
+    animation: correctFlash 0.5s ease;
+}
 `,
     
     // Code JavaScript
     js: `
-// Configuration du canvas
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const scoreElement = document.getElementById('score');
-const highScoreElement = document.getElementById('highScore');
-const gameOverDiv = document.getElementById('gameOver');
-const finalScoreElement = document.getElementById('finalScore');
-
-// Dimensions
-const LANE_COUNT = 3;
-const LANE_WIDTH = canvas.width / LANE_COUNT;
-const PLAYER_SIZE = 30;
-const OBSTACLE_SIZE = 30;
-const GROUND_Y = canvas.height - 80; // Position au sol
-const JUMP_HEIGHT = 120; // Hauteur du saut
-
-// Variables du jeu
-let playerX = canvas.width / 2 - PLAYER_SIZE / 2;
-let playerLane = 1; // 0: gauche, 1: milieu, 2: droite
-let playerY = GROUND_Y;
-let isJumping = false;
-let jumpVelocity = 0;
-const GRAVITY = 0.8;
-
-let obstacles = [];
+// État du jeu
 let score = 0;
-let highScore = localStorage.getItem('runnerHighScore') || 0;
-let gameRunning = false;
-let gameSpeed = 3;
-let frameCount = 0;
-let animationId;
+let streak = 0;
+let questionCount = 0;
+let bestScore = localStorage.getItem('quizBestScore') || 0;
+let timerInterval;
+let timeLeft = 10;
+let canAnswer = true;
+let currentQuestion = null;
 
-// Afficher le record
-highScoreElement.textContent = highScore;
+// Éléments DOM
+const scoreElement = document.getElementById('score');
+const streakElement = document.getElementById('streak');
+const timerElement = document.getElementById('timer');
+const questionElement = document.getElementById('question');
+const questionNumberElement = document.getElementById('currentQuestion');
+const optionsContainer = document.getElementById('options');
+const feedbackElement = document.getElementById('feedback');
+const gameOverElement = document.getElementById('gameOver');
+const finalScoreElement = document.getElementById('finalScore');
+const bestScoreElement = document.getElementById('bestScore');
+const totalQuestionsElement = document.getElementById('totalQuestions');
 
-// Classe pour les obstacles
-class Obstacle {
-    constructor(lane) {
-        this.lane = lane;
-        this.x = lane * LANE_WIDTH + (LANE_WIDTH - OBSTACLE_SIZE) / 2;
-        this.y = -OBSTACLE_SIZE;
-        this.width = OBSTACLE_SIZE;
-        this.height = OBSTACLE_SIZE;
-    }
+// Afficher le meilleur score
+bestScoreElement.textContent = bestScore;
+
+// Banque de templates de questions
+const questionTemplates = [
+    // Balises de base
+    {
+        generate: () => ({
+            question: "Quelle balise est utilisée pour créer un titre de niveau 1 ?",
+            options: ["<h1>", "<head>", "<header>", "<heading>"],
+            correct: 0
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise définit un paragraphe en HTML ?",
+            options: ["<p>", "<para>", "<paragraph>", "<text>"],
+            correct: 0
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise est utilisée pour créer un lien hypertexte ?",
+            options: ["<link>", "<a>", "<href>", "<url>"],
+            correct: 1
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise affiche une image ?",
+            options: ["<picture>", "<img>", "<image>", "<src>"],
+            correct: 1
+        })
+    },
     
-    update() {
-        this.y += gameSpeed;
-    }
+    // Attributs
+    {
+        generate: () => ({
+            question: "Quel attribut définit l'URL d'un lien ?",
+            options: ["src", "link", "href", "url"],
+            correct: 2
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quel attribut définit la source d'une image ?",
+            options: ["src", "source", "img", "href"],
+            correct: 0
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quel attribut rend un champ de formulaire obligatoire ?",
+            options: ["required", "mandatory", "must", "obligatoire"],
+            correct: 0
+        })
+    },
     
-    draw() {
-        // Obstacle (train)
-        ctx.fillStyle = '#FF4444';
-        ctx.shadowColor = '#990000';
-        ctx.shadowBlur = 10;
-        ctx.beginPath();
-        ctx.roundRect(this.x, this.y, this.width, this.height, 5);
-        ctx.fill();
-        
-        // Détails
-        ctx.fillStyle = '#FFFFFF';
-        ctx.shadowBlur = 0;
-        ctx.fillRect(this.x + 5, this.y + 5, 5, 5);
-        ctx.fillRect(this.x + this.width - 10, this.y + 5, 5, 5);
-        ctx.fillRect(this.x + 5, this.y + this.height - 10, 5, 5);
-        ctx.fillRect(this.x + this.width - 10, this.y + this.height - 10, 5, 5);
-        
-        ctx.shadowBlur = 0;
+    // HTML5
+    {
+        generate: () => ({
+            question: "Quelle balise HTML5 est utilisée pour la navigation ?",
+            options: ["<navigation>", "<nav>", "<menu>", "<links>"],
+            correct: 1
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise définit un article indépendant ?",
+            options: ["<post>", "<entry>", "<article>", "<content>"],
+            correct: 2
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise regroupe du contenu dans un formulaire ?",
+            options: ["<group>", "<fieldset>", "<formgroup>", "<fields>"],
+            correct: 1
+        })
+    },
+    
+    // Listes
+    {
+        generate: () => ({
+            question: "Quelle balise crée une liste non ordonnée ?",
+            options: ["<ol>", "<ul>", "<list>", "<li>"],
+            correct: 1
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise crée une liste ordonnée ?",
+            options: ["<ol>", "<ul>", "<list>", "<order>"],
+            correct: 0
+        })
+    },
+    
+    // Tableaux
+    {
+        generate: () => ({
+            question: "Quelle balise crée une ligne dans un tableau ?",
+            options: ["<td>", "<tr>", "<th>", "<row>"],
+            correct: 1
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise définit une cellule d'en-tête dans un tableau ?",
+            options: ["<td>", "<tr>", "<th>", "<header>"],
+            correct: 2
+        })
+    },
+    
+    // Formulaires
+    {
+        generate: () => ({
+            question: "Quelle balise crée un champ de saisie texte ?",
+            options: ["<text>", "<input type='text'>", "<field>", "<textarea>"],
+            correct: 1
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise crée une zone de texte multiligne ?",
+            options: ["<input type='text'>", "<textarea>", "<multiline>", "<textbox>"],
+            correct: 1
+        })
+    },
+    
+    // Sémantique
+    {
+        generate: () => ({
+            question: "Quelle balise définit le pied de page d'un document ?",
+            options: ["<bottom>", "<footer>", "<foot>", "<end>"],
+            correct: 1
+        })
+    },
+    {
+        generate: () => ({
+            question: "Quelle balise définit l'en-tête d'un document ?",
+            options: ["<head>", "<header>", "<top>", "<heading>"],
+            correct: 1
+        })
     }
+];
+
+// Générer une nouvelle question
+function generateQuestion() {
+    // Choisir un template aléatoire
+    const template = questionTemplates[Math.floor(Math.random() * questionTemplates.length)];
+    return template.generate();
 }
 
-// Helper pour les rectangles arrondis
-CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-    if (w < 2 * r) r = w / 2;
-    if (h < 2 * r) r = h / 2;
-    this.moveTo(x + r, y);
-    this.lineTo(x + w - r, y);
-    this.quadraticCurveTo(x + w, y, x + w, y + r);
-    this.lineTo(x + w, y + h - r);
-    this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    this.lineTo(x + r, y + h);
-    this.quadraticCurveTo(x, y + h, x, y + h - r);
-    this.lineTo(x, y + r);
-    this.quadraticCurveTo(x, y, x + r, y);
-    return this;
-};
+// Mélanger un tableau (algorithme de Fisher-Yates)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
-// Dessiner le joueur
-function drawPlayer() {
-    // Corps
-    ctx.fillStyle = '#4CAF50';
-    ctx.shadowColor = '#2E7D32';
-    ctx.shadowBlur = 15;
-    ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2, playerY + PLAYER_SIZE/2, PLAYER_SIZE/2, 0, Math.PI * 2);
-    ctx.fill();
+// Afficher une question
+function displayQuestion() {
+    // Générer une nouvelle question
+    currentQuestion = generateQuestion();
+    questionCount++;
     
-    // Yeux
-    ctx.fillStyle = '#FFFFFF';
-    ctx.shadowBlur = 0;
-    ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 - 5, playerY + PLAYER_SIZE/2 - 5, 5, 0, Math.PI * 2);
-    ctx.fill();
+    // Mettre à jour l'interface
+    questionNumberElement.textContent = questionCount;
+    questionElement.textContent = currentQuestion.question;
     
-    ctx.fillStyle = '#000000';
-    ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 - 7, playerY + PLAYER_SIZE/2 - 7, 2, 0, Math.PI * 2);
-    ctx.fill();
+    // Créer les options (mélangées)
+    const shuffledOptions = shuffleArray([...currentQuestion.options]);
+    const correctAnswerText = currentQuestion.options[currentQuestion.correct];
+    const correctIndex = shuffledOptions.indexOf(correctAnswerText);
     
-    ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 + 5, playerY + PLAYER_SIZE/2 - 5, 5, 0, Math.PI * 2);
-    ctx.fill();
+    optionsContainer.innerHTML = '';
+    shuffledOptions.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'option';
+        button.textContent = option;
+        button.dataset.index = index;
+        button.dataset.correct = (index === correctIndex).toString();
+        button.addEventListener('click', () => checkAnswer(button));
+        optionsContainer.appendChild(button);
+    });
     
-    ctx.fillStyle = '#000000';
-    ctx.beginPath();
-    ctx.arc(playerX + PLAYER_SIZE/2 + 3, playerY + PLAYER_SIZE/2 - 7, 2, 0, Math.PI * 2);
-    ctx.fill();
+    // Réinitialiser le timer
+    resetTimer();
+    canAnswer = true;
+    feedbackElement.textContent = '';
+    feedbackElement.className = 'feedback';
+}
+
+// Vérifier la réponse
+function checkAnswer(selectedButton) {
+    if (!canAnswer) return;
     
-    // Casquette (tourne pendant le saut)
-    ctx.fillStyle = '#FF5722';
-    if (isJumping) {
-        ctx.save();
-        ctx.translate(playerX + PLAYER_SIZE/2, playerY);
-        ctx.rotate(jumpVelocity * 0.1);
-        ctx.fillRect(-PLAYER_SIZE/2 + 5, -5, 20, 8);
-        ctx.restore();
+    const isCorrect = selectedButton.dataset.correct === 'true';
+    const allOptions = document.querySelectorAll('.option');
+    
+    // Désactiver toutes les options
+    allOptions.forEach(opt => {
+        opt.classList.add('disabled');
+        if (opt.dataset.correct === 'true') {
+            opt.classList.add('correct');
+        }
+    });
+    
+    // Marquer la réponse sélectionnée
+    if (isCorrect) {
+        selectedButton.classList.add('correct');
+        feedbackElement.textContent = '✅ Bonne réponse !';
+        feedbackElement.className = 'feedback correct';
+        
+        // Augmenter le score
+        score += 10 + (streak * 5);
+        streak++;
+        
+        // Animation de streak
+        if (streak > 1) {
+            feedbackElement.textContent += \` (Streak x\${streak} !)\`;
+        }
     } else {
-        ctx.fillRect(playerX + 5, playerY - 5, 20, 8);
-    }
-}
-
-// Dessiner les voies
-function drawLanes() {
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([15, 15]);
-    
-    for (let i = 1; i < LANE_COUNT; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * LANE_WIDTH, 0);
-        ctx.lineTo(i * LANE_WIDTH, canvas.height);
-        ctx.stroke();
+        selectedButton.classList.add('incorrect');
+        feedbackElement.textContent = '❌ Mauvaise réponse !';
+        feedbackElement.className = 'feedback incorrect';
+        streak = 0;
     }
     
-    ctx.setLineDash([]);
-}
-
-// Gérer le saut
-function handleJump() {
-    if (isJumping) {
-        playerY += jumpVelocity;
-        jumpVelocity += GRAVITY;
-        
-        // Atterrissage
-        if (playerY >= GROUND_Y) {
-            playerY = GROUND_Y;
-            isJumping = false;
-            jumpVelocity = 0;
-        }
-    }
-}
-
-// Mettre à jour le jeu
-function update() {
-    if (!gameRunning) return;
-    
-    // Gérer le saut
-    handleJump();
-    
-    // Générer des obstacles
-    if (frameCount % 60 === 0) {
-        const lane = Math.floor(Math.random() * LANE_COUNT);
-        obstacles.push(new Obstacle(lane));
-    }
-    
-    // Mettre à jour les obstacles
-    for (let i = obstacles.length - 1; i >= 0; i--) {
-        obstacles[i].update();
-        
-        // Vérifier la collision (seulement si on est au sol)
-        if (!isJumping && obstacles[i].lane === playerLane) {
-            if (obstacles[i].y + obstacles[i].height > playerY && 
-                obstacles[i].y < playerY + PLAYER_SIZE) {
-                gameOver();
-                return;
-            }
-        }
-        
-        // Supprimer les obstacles sortis
-        if (obstacles[i].y > canvas.height) {
-            obstacles.splice(i, 1);
-            score += 10;
-            scoreElement.textContent = score;
-            
-            // Augmenter la vitesse tous les 100 points
-            if (score % 100 === 0) {
-                gameSpeed += 0.5;
-            }
-        }
-    }
-    
-    frameCount++;
-}
-
-// Dessiner le jeu
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawLanes();
-    obstacles.forEach(obstacle => obstacle.draw());
-    drawPlayer();
-}
-
-// Boucle de jeu
-function gameLoop() {
-    update();
-    draw();
-    animationId = requestAnimationFrame(gameLoop);
-}
-
-// Démarrer le jeu
-function startGame() {
-    gameRunning = true;
-    obstacles = [];
-    score = 0;
-    gameSpeed = 3;
-    frameCount = 0;
-    playerLane = 1;
-    playerY = GROUND_Y;
-    isJumping = false;
-    jumpVelocity = 0;
-    playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
+    // Mettre à jour l'affichage
     scoreElement.textContent = score;
-    gameOverDiv.classList.add('hidden');
-    gameLoop();
+    streakElement.textContent = streak;
+    
+    // Arrêter le timer
+    clearInterval(timerInterval);
+    canAnswer = false;
+    
+    // Passer à la question suivante après un délai
+    setTimeout(() => {
+        displayQuestion();
+    }, 1500);
+}
+
+// Timer
+function startTimer() {
+    timeLeft = 10;
+    timerElement.textContent = \`⏱️ \${timeLeft}s\`;
+    timerElement.classList.remove('warning');
+    
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = \`⏱️ \${timeLeft}s\`;
+        
+        if (timeLeft <= 3) {
+            timerElement.classList.add('warning');
+        }
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            if (canAnswer) {
+                // Temps écoulé
+                feedbackElement.textContent = '⏰ Temps écoulé !';
+                feedbackElement.className = 'feedback incorrect';
+                
+                // Montrer la bonne réponse
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.add('disabled');
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.add('correct');
+                    }
+                });
+                
+                streak = 0;
+                streakElement.textContent = streak;
+                canAnswer = false;
+                
+                setTimeout(() => {
+                    displayQuestion();
+                }, 1500);
+            }
+        }
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(timerInterval);
+    startTimer();
 }
 
 // Game Over
 function gameOver() {
-    gameRunning = false;
-    cancelAnimationFrame(animationId);
+    clearInterval(timerInterval);
     
-    if (score > highScore) {
-        highScore = score;
-        localStorage.setItem('runnerHighScore', highScore);
-        highScoreElement.textContent = highScore;
+    // Mettre à jour le meilleur score
+    if (score > bestScore) {
+        bestScore = score;
+        localStorage.setItem('quizBestScore', bestScore);
     }
     
+    // Afficher les statistiques
     finalScoreElement.textContent = score;
-    gameOverDiv.classList.remove('hidden');
+    bestScoreElement.textContent = bestScore;
+    totalQuestionsElement.textContent = questionCount;
+    
+    gameOverElement.classList.remove('hidden');
 }
 
-// Fonctions de contrôle
-function moveLeft() {
-    if (!gameRunning) return;
-    if (playerLane > 0) {
-        playerLane--;
-        playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
-    }
+// Redémarrer le quiz
+function restartQuiz() {
+    score = 0;
+    streak = 0;
+    questionCount = 0;
+    
+    scoreElement.textContent = score;
+    streakElement.textContent = streak;
+    
+    gameOverElement.classList.add('hidden');
+    
+    displayQuestion();
 }
 
-function moveRight() {
-    if (!gameRunning) return;
-    if (playerLane < LANE_COUNT - 1) {
-        playerLane++;
-        playerX = playerLane * LANE_WIDTH + (LANE_WIDTH - PLAYER_SIZE) / 2;
-    }
-}
+// Initialisation
+displayQuestion();
 
-function jump() {
-    if (!gameRunning) return;
-    if (!isJumping) {
-        isJumping = true;
-        jumpVelocity = -12; // Vitesse initiale vers le haut
-    }
-}
+// Exposer la fonction pour le bouton
+window.restartQuiz = restartQuiz;
 
-function restartGame() {
-    startGame();
-}
-
-// Contrôles clavier
-document.addEventListener('keydown', (e) => {
-    if (!gameRunning) return;
-    
-    switch(e.key) {
-        case 'ArrowLeft':
-            e.preventDefault();
-            moveLeft();
-            break;
-        case 'ArrowRight':
-            e.preventDefault();
-            moveRight();
-            break;
-        case 'ArrowDown':
-            e.preventDefault();
-            jump();
-            break;
-    }
+// Gestionnaire d'erreur
+window.addEventListener('error', (e) => {
+    console.log('Erreur gérée:', e.message);
 });
-
-// Contrôles tactiles
-document.getElementById('moveLeft').addEventListener('click', moveLeft);
-document.getElementById('moveRight').addEventListener('click', moveRight);
-document.getElementById('jumpBtn').addEventListener('click', jump);
-
-// Bouton restart
-document.getElementById('restartBtn').addEventListener('click', restartGame);
-
-// Empêcher le défilement de la page avec les flèches
-window.addEventListener('keydown', (e) => {
-    if (e.key.startsWith('Arrow')) {
-        e.preventDefault();
-    }
-});
-
-// Swipe tactile sur le canvas (pour ceux qui préfèrent swiper)
-let touchStartX = 0;
-canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    touchStartX = e.touches[0].clientX;
-});
-
-canvas.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    if (!gameRunning) return;
-    
-    const touchEndX = e.changedTouches[0].clientX;
-    const diffX = touchEndX - touchStartX;
-    
-    // Détection du swipe horizontal
-    if (Math.abs(diffX) > 50) {
-        if (diffX > 0) {
-            moveRight(); // Swipe droite
-        } else {
-            moveLeft(); // Swipe gauche
-        }
-    }
-});
-
-// Double tap pour sauter
-let lastTap = 0;
-canvas.addEventListener('touchend', (e) => {
-    const currentTime = new Date().getTime();
-    const tapLength = currentTime - lastTap;
-    
-    if (tapLength < 300 && tapLength > 0) {
-        e.preventDefault();
-        jump(); // Double tap = saut
-    }
-    
-    lastTap = currentTime;
-});
-
-// Démarrer automatiquement
-startGame();
 `
 };
