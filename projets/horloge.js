@@ -2,91 +2,91 @@
 
 export const project = {
     name: 'Horloge analogique',
-    html: `<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horloge</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="clock">
-        <div class="face">
-            <div class="hand hour" id="hour"></div>
-            <div class="hand minute" id="minute"></div>
-            <div class="hand second" id="second"></div>
-        </div>
-    </div>
-    <script src="script.js"><\/script>
-</body>
-</html>`,
-    css: `body {
-    background: #2d3436;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
-
-.clock {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-    position: relative;
-}
-
-.face {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.hand {
-    position: absolute;
-    bottom: 50%;
-    left: 50%;
-    transform-origin: bottom;
-    background: #2d3436;
-    border-radius: 5px;
-}
-
-.hour {
-    width: 6px;
-    height: 70px;
-    margin-left: -3px;
-}
-
-.minute {
-    width: 4px;
-    height: 90px;
-    margin-left: -2px;
-}
-
-.second {
-    width: 2px;
-    height: 100px;
-    margin-left: -1px;
-    background: #e74c3c;
-}`,
-    js: `function updateClock() {
-    const now = new Date();
-    const hours = now.getHours() % 12;
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
-    
-    const hourDeg = (hours * 30) + (minutes * 0.5);
-    const minuteDeg = minutes * 6;
-    const secondDeg = seconds * 6;
-    
-    document.getElementById('hour').style.transform = \`rotate(\${hourDeg}deg)\`;
-    document.getElementById('minute').style.transform = \`rotate(\${minuteDeg}deg)\`;
-    document.getElementById('second').style.transform = \`rotate(\${secondDeg}deg)\`;
-}
-
-setInterval(updateClock, 1000);
-updateClock();`
+    html: '<!DOCTYPE html>\n' +
+'<html lang="fr">\n' +
+'<head>\n' +
+'    <meta charset="UTF-8">\n' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+'    <title>Horloge</title>\n' +
+'    <link rel="stylesheet" href="style.css">\n' +
+'</head>\n' +
+'<body>\n' +
+'    <div class="clock">\n' +
+'        <div class="face">\n' +
+'            <div class="hand hour" id="hour"></div>\n' +
+'            <div class="hand minute" id="minute"></div>\n' +
+'            <div class="hand second" id="second"></div>\n' +
+'        </div>\n' +
+'    </div>\n' +
+'    <script src="script.js"><\/script>\n' +
+'</body>\n' +
+'</html>',
+    css: 'body {\n' +
+'    background: #2d3436;\n' +
+'    display: flex;\n' +
+'    justify-content: center;\n' +
+'    align-items: center;\n' +
+'    min-height: 100vh;\n' +
+'    margin: 0;\n' +
+'}\n' +
+'\n' +
+'.clock {\n' +
+'    width: 300px;\n' +
+'    height: 300px;\n' +
+'    border-radius: 50%;\n' +
+'    background: white;\n' +
+'    box-shadow: 0 20px 40px rgba(0,0,0,0.2);\n' +
+'    position: relative;\n' +
+'}\n' +
+'\n' +
+'.face {\n' +
+'    width: 100%;\n' +
+'    height: 100%;\n' +
+'    position: relative;\n' +
+'}\n' +
+'\n' +
+'.hand {\n' +
+'    position: absolute;\n' +
+'    bottom: 50%;\n' +
+'    left: 50%;\n' +
+'    transform-origin: bottom;\n' +
+'    background: #2d3436;\n' +
+'    border-radius: 5px;\n' +
+'}\n' +
+'\n' +
+'.hour {\n' +
+'    width: 6px;\n' +
+'    height: 70px;\n' +
+'    margin-left: -3px;\n' +
+'}\n' +
+'\n' +
+'.minute {\n' +
+'    width: 4px;\n' +
+'    height: 90px;\n' +
+'    margin-left: -2px;\n' +
+'}\n' +
+'\n' +
+'.second {\n' +
+'    width: 2px;\n' +
+'    height: 100px;\n' +
+'    margin-left: -1px;\n' +
+'    background: #e74c3c;\n' +
+'}',
+    js: 'function updateClock() {\n' +
+'    const now = new Date();\n' +
+'    const hours = now.getHours() % 12;\n' +
+'    const minutes = now.getMinutes();\n' +
+'    const seconds = now.getSeconds();\n' +
+'    \n' +
+'    const hourDeg = (hours * 30) + (minutes * 0.5);\n' +
+'    const minuteDeg = minutes * 6;\n' +
+'    const secondDeg = seconds * 6;\n' +
+'    \n' +
+'    document.getElementById("hour").style.transform = "rotate(" + hourDeg + "deg)";\n' +
+'    document.getElementById("minute").style.transform = "rotate(" + minuteDeg + "deg)";\n' +
+'    document.getElementById("second").style.transform = "rotate(" + secondDeg + "deg)";\n' +
+'}\n' +
+'\n' +
+'setInterval(updateClock, 1000);\n' +
+'updateClock();'
 };
