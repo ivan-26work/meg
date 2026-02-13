@@ -1,3 +1,4 @@
+<!-- preview.html - Version améliorée -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -24,8 +25,14 @@
             </button>
         </header>
 
-        <!-- Cadre de rendu -->
+        <!-- Cadre de rendu avec loader -->
         <main class="preview-frame-container">
+            <div class="preview-loader" id="previewLoader">
+                <div class="loader-box">
+                    <span class="loader-text">MG_ULTRA</span>
+                    <div class="loader-progress" id="loaderProgress"></div>
+                </div>
+            </div>
             <iframe id="preview-iframe" class="preview-frame" 
                     sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-modals"
                     title="Aperçu du projet">
