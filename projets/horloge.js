@@ -1,88 +1,92 @@
 // projets/horloge.js
 
 export const project = {
-    name: 'Horloge numérique',
+    name: 'Horloge analogique',
     html: `<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horloge MG_ULTRA</title>
+    <title>Horloge</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="clock-container">
-        <div class="clock">
-            <div class="time" id="time">00:00:00</div>
-            <div class="date" id="date">Lundi 1 Janvier 2024</div>
+    <div class="clock">
+        <div class="face">
+            <div class="hand hour" id="hour"></div>
+            <div class="hand minute" id="minute"></div>
+            <div class="hand second" id="second"></div>
         </div>
     </div>
     <script src="script.js"><\/script>
 </body>
 </html>`,
-    
     css: `body {
-    margin: 0;
-    padding: 0;
-    background: #e0e5ec;
-    font-family: 'Inter', sans-serif;
+    background: #2d3436;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-}
-
-.clock-container {
-    background: #e0e5ec;
-    padding: 40px;
-    border-radius: 50px;
-    box-shadow: 20px 20px 30px #a3b1c6, -20px -20px 30px #ffffff;
+    margin: 0;
 }
 
 .clock {
-    text-align: center;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    position: relative;
 }
 
-.time {
-    font-size: 72px;
-    font-weight: 700;
-    color: #4c9a8c;
-    text-shadow: 2px 2px 4px #a3b1c6;
-    margin-bottom: 10px;
-    font-family: 'Monaco', monospace;
-    background: #e0e5ec;
-    padding: 20px 40px;
-    border-radius: 30px;
-    box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+.face {
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
-.date {
-    font-size: 24px;
-    color: #4a4e69;
-    font-weight: 500;
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    background: #2d3436;
+    border-radius: 5px;
+}
+
+.hour {
+    width: 6px;
+    height: 70px;
+    margin-left: -3px;
+}
+
+.minute {
+    width: 4px;
+    height: 90px;
+    margin-left: -2px;
+}
+
+.second {
+    width: 2px;
+    height: 100px;
+    margin-left: -1px;
+    background: #e74c3c;
 }`,
-    
     js: `function updateClock() {
     const now = new Date();
+    const hours = now.getHours() % 12;
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
     
-    // Heure
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    document.getElementById('time').textContent = \`\${hours}:\${minutes}:\${seconds}\`;
+    const hourDeg = (hours * 30) + (minutes * 0.5);
+    const minuteDeg = minutes * 6;
+    const secondDeg = seconds * 6;
     
-    // Date
-    const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-    const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-    
-    const dayName = days[now.getDay()];
-    const day = now.getDate();
-    const month = months[now.getMonth()];
-    const year = now.getFullYear();
-    
-    document.getElementById('date').textContent = \`\${dayName} \${day} \${month} \${year}\`;
+    document.getElementById('hour').style.transform = \`rotate(\${hourDeg}deg)\`;
+    document.getElementById('minute').style.transform = \`rotate(\${minuteDeg}deg)\`;
+    document.getElementById('second').style.transform = \`rotate(\${secondDeg}deg)\`;
 }
 
-updateClock();
-setInterval(updateClock, 1000);`
+setInterval(updateClock, 1000);
+updateClock();`
 };
